@@ -259,6 +259,14 @@ hr {
     border-color: #7c3aed;
     transform: translateY(-2px);
 }
+.feat-card--muted {
+    opacity: 0.4;
+    pointer-events: none;
+}
+.feat-card--muted:hover {
+    border-color: #2d2d44;
+    transform: none;
+}
 .feat-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
 .feat-title {
     font-size: 1rem;
@@ -570,11 +578,11 @@ def render_sidebar():
 
         st.divider()
 
-        if st.button("🏠 Dashboard", use_container_width=True,
+        if st.button("Dashboard", icon=":material/home:", use_container_width=True,
                      type="primary" if st.session_state.screen == "dashboard" else "secondary"):
             go("dashboard")
 
-        if st.button("🗺️ Trilha POO", use_container_width=True,
+        if st.button("Trilha POO", icon=":material/map:", use_container_width=True,
                      type="primary" if st.session_state.screen == "trilha" else "secondary"):
             go("trilha")
 
@@ -635,30 +643,30 @@ def screen_dashboard():
 
     c1, c2, c3 = st.columns(3)
     cards = [
-        ("🗄️", "Estruturas de Dados",
-         "Do array ao grafo, domine como organizar dados de forma eficiente."),
         ("🎯", "Orientação a Objetos",
-         "Classes, herança e polimorfismo para criar código como um profissional."),
+         "Classes, herança e polimorfismo para criar código como um profissional.", False),
+        ("🗄️", "Estruturas de Dados",
+         "Do array ao grafo, domine como organizar dados de forma eficiente.", True),
         ("📌", "Ponteiros",
-         "Domine boas ordenações e eficiência computacional com exemplos reais."),
+         "Domine boas ordenações e eficiência computacional com exemplos reais.", True),
     ]
-    for col, (icon, title, desc) in zip([c1, c2, c3], cards):
+    for col, (icon, title, desc, muted) in zip([c1, c2, c3], cards):
         with col:
+            css_class = "feat-card feat-card--muted" if muted else "feat-card"
             st.markdown(
-                f'<div class="feat-card">'
+                f'<div class="{css_class}">'
                 f'  <div class="feat-icon">{icon}</div>'
                 f'  <div class="feat-title">{title}</div>'
                 f'  <div class="feat-desc">{desc}</div>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
-            if title == "Orientação a Objetos":
+            if not muted:
                 st.write("")
                 if st.button("Explorar →", key="hero_explore", type="primary"):
                     go("trilha")
             else:
-                st.write("")
-                st.button("Em breve", key=f"soon_{title}", disabled=True)
+                st.markdown('<p style="color:#555570;font-size:0.75rem;margin-top:0.5rem;">em breve</p>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════
