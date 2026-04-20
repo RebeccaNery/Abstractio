@@ -160,9 +160,10 @@ hr {
     gap: 6px;
 }
 .pb-module-label {
-    font-size: 0.65rem;
-    color: #64748b;
+    font-size: 0.78rem;
+    color: #94a3b8;
     white-space: nowrap;
+    font-weight: 600;
 }
 .pb-circles {
     display: flex;
@@ -204,9 +205,10 @@ hr {
     gap: 6px;
 }
 .pb-sep-label {
-    font-size: 0.6rem;
-    color: #475569;
+    font-size: 0.82rem;
+    color: #c4b5fd;
     white-space: nowrap;
+    font-weight: 600;
 }
 .pb-sep-line {
     width: 2px;
