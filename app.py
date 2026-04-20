@@ -14,6 +14,20 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block');
+.material-symbols-rounded {
+    font-family: 'Material Symbols Rounded';
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
+
 /* ── Base ─────────────────────────────────────────── */
 .stApp, [data-testid="stAppViewContainer"] {
     background-color: #0f0f23;
@@ -258,8 +272,8 @@ hr {
     transition: border-color 0.2s, transform 0.2s;
 }
 .feat-card:hover {
-    border-color: #7c3aed;
-    transform: translateY(-2px);
+    border-color: #2d2d44;
+    transform: none;
 }
 .feat-card--muted {
     opacity: 0.4;
@@ -269,7 +283,8 @@ hr {
     border-color: #2d2d44;
     transform: none;
 }
-.feat-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.feat-icon { font-size: 1.8rem; margin-bottom: 0.5rem; color: #c4b5fd; }
+.feat-icon .material-symbols-rounded { font-size: inherit; }
 .feat-title {
     font-size: 1rem;
     font-weight: 700;
@@ -286,13 +301,8 @@ hr {
     padding: 10px 14px;
     border-radius: 8px;
     margin-bottom: 4px;
-    cursor: pointer;
+    cursor: default;
     border: 1px solid transparent;
-    transition: all 0.15s;
-}
-.section-row:hover {
-    background: #1e1e38;
-    border-color: #3d3d5e;
 }
 .section-row.done {
     border-color: #065f46;
@@ -300,7 +310,7 @@ hr {
 }
 .section-status { font-size: 0.9rem; min-width: 20px; }
 .section-name { font-size: 0.92rem; color: #e2e8f0; flex: 1; }
-.section-pts { font-size: 0.75rem; color: #64748b; }
+.section-pts { font-size: 0.88rem; font-weight: 600; color: #64748b; }
 
 /* ── Module block (trilha) ───────────────────────── */
 .module-header {
@@ -314,8 +324,8 @@ hr {
     justify-content: space-between;
 }
 .module-title { font-size: 1rem; font-weight: 700; color: #c4b5fd; }
-.module-pts { font-size: 0.8rem; color: #7c3aed; background: #1e1e35;
-              padding: 2px 10px; border-radius: 20px; border: 1px solid #3d3d5e; }
+.module-pts { font-size: 0.9rem; font-weight: 600; color: #a78bfa; background: #1e1e35;
+              padding: 4px 14px; border-radius: 20px; border: 1px solid #4c3a8a; }
 
 /* ── Theory area ─────────────────────────────────── */
 .theory-box {
@@ -384,10 +394,10 @@ hr {
 NIVEIS = ["Iniciante", "Estagiário", "Júnior", "Pleno", "Sênior"]
 
 EMBLEMAS_MAP = {
-    50:  "🏅 Encapsuladora Iniciante",
-    100: "🏆 Mestre da Herança",
-    150: "💎 Rainha da Abstração",
-    200: "🌟 Polimorfista Suprema",
+    50:  "Encapsuladora Iniciante",
+    100: "Mestre da Herança",
+    150: "Rainha da Abstração",
+    200: "Polimorfista Suprema",
 }
 
 # ══════════════════════════════════════════════════════════════
@@ -419,7 +429,7 @@ _init()
 
 # Show welcome toast once
 if st.session_state.first_visit:
-    st.toast("🎉 Parabéns por iniciar sua jornada!", icon="🚀")
+    st.toast("Parabéns por iniciar sua jornada!", icon=":material/celebration:")
     st.session_state.first_visit = False
 
 # ══════════════════════════════════════════════════════════════
@@ -458,7 +468,7 @@ def _award_points(n):
     for threshold, badge in EMBLEMAS_MAP.items():
         if old < threshold <= new and badge not in st.session_state.emblemas:
             st.session_state.emblemas.append(badge)
-            st.toast(f"🎖️ Emblema desbloqueado: {badge}!", icon="🏅")
+            st.toast(f"Emblema desbloqueado: {badge}!", icon=":material/military_tech:")
 
 
 def complete_section(m, s):
@@ -467,7 +477,7 @@ def complete_section(m, s):
         st.session_state.completed.add(key)
         st.session_state.ex_correct = True
         _award_points(15)
-        st.toast("+15 pontos! Continue assim! 🔥", icon="⭐")
+        st.toast("+15 pontos! Continue assim!", icon=":material/star:")
         # Check module completion
         module = CURRICULUM[m]
         needed = {section_key(m, i) for i in range(len(module["sections"]))}
@@ -481,7 +491,7 @@ def _nivel_up():
     if idx < len(NIVEIS) - 1:
         st.session_state.nivel_idx += 1
         st.session_state.nivel = NIVEIS[st.session_state.nivel_idx]
-        st.toast(f"⬆️ Você evoluiu para **{st.session_state.nivel}**!", icon="🌟")
+        st.toast(f"Você evoluiu para **{st.session_state.nivel}**!", icon=":material/trending_up:")
 
 
 def navigate_next():
@@ -568,15 +578,15 @@ def render_progress_bar():
 
 def render_sidebar():
     with st.sidebar:
-        st.markdown("## 🎓 Abstractio")
+        st.markdown("## Abstractio")
         st.caption("Aprenda POO na prática")
         st.divider()
 
         col1, col2 = st.columns(2)
         with col1:
-            st.metric("⭐ Pontos", st.session_state.pontuacao)
+            st.metric("Pontos", st.session_state.pontuacao)
         with col2:
-            st.metric("🏆 Nível", st.session_state.nivel)
+            st.metric("Nível", st.session_state.nivel)
 
         st.divider()
 
@@ -590,7 +600,7 @@ def render_sidebar():
 
         if st.session_state.emblemas:
             st.divider()
-            st.markdown("**🎖️ Emblemas**")
+            st.markdown("**Emblemas**")
             for badge in st.session_state.emblemas:
                 st.markdown(f'<span class="badge">{badge}</span>', unsafe_allow_html=True)
 
@@ -601,7 +611,7 @@ render_sidebar()
 #  DIALOG — skip confirmation
 # ══════════════════════════════════════════════════════════════
 
-@st.dialog("⚠️ Exercício não concluído")
+@st.dialog("Exercício não concluído")
 def skip_dialog():
     st.markdown(
         "Tem certeza que quer prosseguir? "
@@ -610,10 +620,10 @@ def skip_dialog():
     st.markdown("Você pode voltar a qualquer momento para completá-lo.")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("✅ Sim, prosseguir", type="primary", use_container_width=True):
+        if st.button("Sim, prosseguir", icon=":material/check:", type="primary", use_container_width=True):
             navigate_next()
     with col2:
-        if st.button("↩️ Cancelar", use_container_width=True):
+        if st.button("Cancelar", icon=":material/arrow_back:", use_container_width=True):
             st.rerun()
 
 
@@ -637,7 +647,7 @@ def screen_dashboard():
 
     col_btn, _, _ = st.columns([1, 2, 1])
     with col_btn:
-        if st.button("🚀 Comece já!", type="primary", use_container_width=True):
+        if st.button("Comece já", icon=":material/rocket_launch:", type="primary", use_container_width=True):
             go("trilha")
 
     st.markdown("---")
@@ -645,11 +655,11 @@ def screen_dashboard():
 
     c1, c2, c3 = st.columns(3)
     cards = [
-        ("🎯", "Orientação a Objetos",
+        ("adjust", "Orientação a Objetos",
          "Classes, herança e polimorfismo para criar código como um profissional.", False),
-        ("🗄️", "Estruturas de Dados",
+        ("database", "Estruturas de Dados",
          "Do array ao grafo, domine como organizar dados de forma eficiente.", True),
-        ("📌", "Ponteiros",
+        ("push_pin", "Ponteiros",
          "Domine boas ordenações e eficiência computacional com exemplos reais.", True),
     ]
     for col, (icon, title, desc, muted) in zip([c1, c2, c3], cards):
@@ -657,7 +667,7 @@ def screen_dashboard():
             css_class = "feat-card feat-card--muted" if muted else "feat-card"
             st.markdown(
                 f'<div class="{css_class}">'
-                f'  <div class="feat-icon">{icon}</div>'
+                f'  <div class="feat-icon"><span class="material-symbols-rounded">{icon}</span></div>'
                 f'  <div class="feat-title">{title}</div>'
                 f'  <div class="feat-desc">{desc}</div>'
                 f'</div>',
@@ -665,7 +675,7 @@ def screen_dashboard():
             )
             if not muted:
                 st.write("")
-                if st.button("Explorar →", key="hero_explore", type="primary"):
+                if st.button("Explorar", icon=":material/arrow_forward:", key="hero_explore", type="primary"):
                     go("trilha")
             else:
                 st.markdown('<p style="color:#555570;font-size:0.75rem;margin-top:0.5rem;">em breve</p>', unsafe_allow_html=True)
@@ -678,7 +688,7 @@ def screen_dashboard():
 def screen_trilha():
     render_progress_bar()
 
-    st.markdown("## 🎓 Programação Orientada a Objetos")
+    st.markdown("## Programação Orientada a Objetos")
 
     st.info(
         "Você irá aprender todos os conceitos fundamentais de POO — classes, objetos, "
@@ -701,20 +711,21 @@ def screen_trilha():
 
         for s_idx, section in enumerate(module["sections"]):
             done = is_done(m_idx, s_idx)
-            status_icon = "✅" if done else "🔵"
+            status_icon = '<span class="material-symbols-rounded" style="color:#10b981;font-size:1rem;">check_circle</span>' if done else '<span class="material-symbols-rounded" style="color:#4b5563;font-size:1rem;">radio_button_unchecked</span>'
             col_sec, col_btn = st.columns([5, 1])
             with col_sec:
                 st.markdown(
                     f'<div class="section-row {"done" if done else ""}">'
                     f'  <span class="section-status">{status_icon}</span>'
-                    f'  <span class="section-name">{section["icon"]} {section["title"]}</span>'
+                    f'  <span class="section-name">{section["title"]}</span>'
                     f'  <span class="section-pts">+15 pts</span>'
                     f'</div>',
                     unsafe_allow_html=True,
                 )
             with col_btn:
-                btn_label = "✓ Rever" if done else "→ Iniciar"
-                if st.button(btn_label, key=f"trl_{m_idx}_{s_idx}",
+                btn_label = "Rever" if done else "Iniciar"
+                btn_icon = ":material/replay:" if done else ":material/play_arrow:"
+                if st.button(btn_label, icon=btn_icon, key=f"trl_{m_idx}_{s_idx}",
                              type="primary" if not done else "secondary"):
                     go("secao", m_idx, s_idx)
 
@@ -745,10 +756,10 @@ def screen_secao():
     with col_bc:
         st.caption(f"{module['title']} › {section['title']}")
     with col_nav:
-        if st.button("← Trilha", key="back_to_trilha"):
+        if st.button("Trilha", icon=":material/arrow_back:", key="back_to_trilha"):
             go("trilha")
 
-    st.markdown(f"# {section['icon']} {section['title']}")
+    st.markdown(f"# {section['title']}")
     st.markdown("---")
 
     # ── Theory ──────────────────────────────────────────────
@@ -758,14 +769,14 @@ def screen_secao():
         st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Interactive placeholder ──────────────────────────────
-    st.info("🎮 **Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta seção será implementado aqui.")
+    st.info("**Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta seção será implementado aqui.")
 
     st.markdown("---")
 
     # ── Exercise ─────────────────────────────────────────────
     ex = section["exercise"]
     st.markdown('<div class="exercise-box">', unsafe_allow_html=True)
-    st.markdown('<div class="exercise-title">🧪 Exercício Prático</div>', unsafe_allow_html=True)
+    st.markdown('<div class="exercise-title">Exercício Prático</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="exercise-q">{ex["question"]}</div>', unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -782,7 +793,7 @@ def screen_secao():
 
     with col_test:
         test_disabled = st.session_state.ex_correct
-        if st.button("🧪 Testar", key=f"test_{section['id']}",
+        if st.button("Testar", icon=":material/science:", key=f"test_{section['id']}",
                      disabled=test_disabled, use_container_width=True):
             if selected is None:
                 st.warning("Selecione uma alternativa antes de testar.")
@@ -794,10 +805,10 @@ def screen_secao():
 
     # Feedback
     if st.session_state.ex_submitted and not st.session_state.ex_correct:
-        st.error("❌ Resposta incorreta. Revise o conteúdo e tente novamente!")
+        st.error("Resposta incorreta. Revise o conteúdo e tente novamente!")
 
     if st.session_state.ex_correct:
-        st.success(f"✅ {ex['explanation']}")
+        st.success(ex['explanation'])
 
     st.markdown("---")
 
@@ -807,7 +818,7 @@ def screen_secao():
     if is_last_in_module and module_complete:
         st.markdown(
             f'<div class="completion-banner">'
-            f'  <h2>🎉 Módulo concluído!</h2>'
+            f'  <h2>Módulo concluído!</h2>'
             f'  <p>Você completou <strong>{module["title"]}</strong> e avançou para '
             f'  o nível <strong>{st.session_state.nivel}</strong>!</p>'
             f'</div>',
@@ -815,19 +826,19 @@ def screen_secao():
         )
         if not is_last_module:
             next_module = CURRICULUM[m + 1]
-            if st.button(f"➡️ Seguir para {next_module['title']}",
+            if st.button(f"Seguir para {next_module['title']}", icon=":material/arrow_forward:",
                          type="primary", key="next_module"):
                 go("secao", m + 1, 0)
         else:
             st.balloons()
             st.markdown(
                 '<div class="completion-banner">'
-                '  <h2>🏆 Trilha Completa!</h2>'
+                '  <h2>Trilha Completa!</h2>'
                 '  <p>Parabéns! Você dominou todos os conceitos de POO!</p>'
                 '</div>',
                 unsafe_allow_html=True,
             )
-            if st.button("🗺️ Ver trilha completa", type="primary"):
+            if st.button("Ver trilha completa", icon=":material/map:", type="primary"):
                 go("trilha")
     else:
         # ── Navigation buttons ────────────────────────────────
@@ -835,27 +846,30 @@ def screen_secao():
         section_completed = st.session_state.ex_correct
 
         if is_last_in_module and not is_last_module:
-            next_label = f"➡️ Seguir para {CURRICULUM[m + 1]['title']}"
+            next_label = f"Seguir para {CURRICULUM[m + 1]['title']}"
+            next_icon = ":material/arrow_forward:"
         elif is_last_in_module and is_last_module:
-            next_label = "🏁 Finalizar trilha"
+            next_label = "Finalizar trilha"
+            next_icon = ":material/flag:"
         else:
             next_module_sections = module["sections"]
             next_sec = next_module_sections[s + 1] if s + 1 < len(next_module_sections) else None
-            next_label = f"→ Próxima: {next_sec['title']}" if next_sec else "→ Próxima seção"
+            next_label = f"Próxima: {next_sec['title']}" if next_sec else "Próxima seção"
+            next_icon = ":material/arrow_forward:"
 
         with btn_cols[0]:
             # Previous section
             if s > 0:
-                if st.button("← Anterior", key="prev_sec"):
+                if st.button("Anterior", icon=":material/arrow_back:", key="prev_sec"):
                     go("secao", m, s - 1)
             elif m > 0:
                 prev_module = CURRICULUM[m - 1]
-                if st.button("← Anterior", key="prev_sec_mod"):
+                if st.button("Anterior", icon=":material/arrow_back:", key="prev_sec_mod"):
                     go("secao", m - 1, len(prev_module["sections"]) - 1)
 
         with btn_cols[1]:
             btn_type = "primary" if section_completed else "secondary"
-            if st.button(next_label, type=btn_type, key="next_sec", use_container_width=True):
+            if st.button(next_label, icon=next_icon, type=btn_type, key="next_sec", use_container_width=True):
                 if section_completed:
                     navigate_next()
                 else:
