@@ -1,5 +1,5 @@
 import streamlit as st
-from curriculum import CURRICULUM, get_flat_sections, get_total_sections
+from curriculum import CURRICULUM, get_flat_missoes, get_total_missoes
 
 st.set_page_config(
     page_title="Abstractio — POO Gamificado",
@@ -391,7 +391,7 @@ hr {
 #  CONSTANTS
 # ══════════════════════════════════════════════════════════════
 
-NIVEIS = ["Iniciante", "Estagiário", "Júnior", "Pleno", "Sênior"]
+RANKS = ["Iniciante", "Estagiário", "Júnior", "Pleno", "Sênior"]
 
 EMBLEMAS_MAP = {
     50:  "Encapsuladora Iniciante",
@@ -406,20 +406,20 @@ EMBLEMAS_MAP = {
 
 def _init():
     defaults = {
-        "screen":             "dashboard",
-        "module_idx":         0,
-        "section_idx":        0,
-        "pontuacao":          10,
-        "nivel":              "Iniciante",
-        "nivel_idx":          0,
-        "completed":          set(),   # set of "m-s" strings
-        "modules_done":       set(),   # set of module indices
-        "emblemas":           [],
-        "first_visit":        True,
-        # per-section exercise state (keyed so navigating resets it)
-        "ex_key":             "",      # current section id
-        "ex_submitted":       False,
-        "ex_correct":         False,
+        "screen":              "dashboard",
+        "nivel_idx":           0,   # índice do nível no currículo
+        "missao_idx":          0,
+        "pontuacao":           10,
+        "rank":                "Iniciante",
+        "rank_idx":            0,
+        "completed":           set(),   # set of "nv-ms" strings
+        "niveis_concluidos":   set(),   # set of nivel indices
+        "emblemas":            [],
+        "first_visit":         True,
+        # per-missao exercise state (keyed so navigating resets it)
+        "ex_key":              "",      # current missao id
+        "ex_submitted":        False,
+        "ex_correct":          False,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -436,29 +436,29 @@ if st.session_state.first_visit:
 #  HELPERS
 # ══════════════════════════════════════════════════════════════
 
-def go(screen, module_idx=None, section_idx=None):
+def go(screen, nivel_idx=None, missao_idx=None):
     st.session_state.screen = screen
-    if module_idx is not None:
-        st.session_state.module_idx = module_idx
-    if section_idx is not None:
-        st.session_state.section_idx = section_idx
+    if nivel_idx is not None:
+        st.session_state.nivel_idx = nivel_idx
+    if missao_idx is not None:
+        st.session_state.missao_idx = missao_idx
     st.rerun()
 
 
-def section_key(m, s):
-    return f"{m}-{s}"
+def missao_key(nv, ms):
+    return f"{nv}-{ms}"
 
 
-def is_done(m, s):
-    return section_key(m, s) in st.session_state.completed
+def is_done(nv, ms):
+    return missao_key(nv, ms) in st.session_state.completed
 
 
-def reset_exercise(m, s):
-    key = section_key(m, s)
+def reset_exercise(nv, ms):
+    key = missao_key(nv, ms)
     if st.session_state.ex_key != key:
         st.session_state.ex_key = key
         st.session_state.ex_submitted = False
-        st.session_state.ex_correct = is_done(m, s)  # already done → mark correct
+        st.session_state.ex_correct = is_done(nv, ms)  # already done → mark correct
 
 
 def _award_points(n):
@@ -471,37 +471,36 @@ def _award_points(n):
             st.toast(f"Emblema desbloqueado: {badge}!", icon=":material/military_tech:")
 
 
-def complete_section(m, s):
-    key = section_key(m, s)
+def complete_missao(nv, ms):
+    key = missao_key(nv, ms)
     if key not in st.session_state.completed:
-        st.session_state.completed.add(key)
+        st.session_state.completed = st.session_state.completed | {key}
         st.session_state.ex_correct = True
         _award_points(15)
         st.toast("+15 pontos! Continue assim!", icon=":material/star:")
-        # Check module completion
-        module = CURRICULUM[m]
-        needed = {section_key(m, i) for i in range(len(module["sections"]))}
-        if needed.issubset(st.session_state.completed) and m not in st.session_state.modules_done:
-            st.session_state.modules_done.add(m)
-            _nivel_up()
+        nivel = CURRICULUM[nv]
+        needed = {missao_key(nv, i) for i in range(len(nivel["missoes"]))}
+        if needed.issubset(st.session_state.completed) and nv not in st.session_state.niveis_concluidos:
+            st.session_state.niveis_concluidos = st.session_state.niveis_concluidos | {nv}
+            _rank_up()
 
 
-def _nivel_up():
-    idx = st.session_state.nivel_idx
-    if idx < len(NIVEIS) - 1:
-        st.session_state.nivel_idx += 1
-        st.session_state.nivel = NIVEIS[st.session_state.nivel_idx]
-        st.toast(f"Você evoluiu para **{st.session_state.nivel}**!", icon=":material/trending_up:")
+def _rank_up():
+    idx = st.session_state.rank_idx
+    if idx < len(RANKS) - 1:
+        st.session_state.rank_idx += 1
+        st.session_state.rank = RANKS[st.session_state.rank_idx]
+        st.toast(f"Você evoluiu para **{st.session_state.rank}**!", icon=":material/trending_up:")
 
 
 def navigate_next():
-    m = st.session_state.module_idx
-    s = st.session_state.section_idx
-    module = CURRICULUM[m]
-    if s + 1 < len(module["sections"]):
-        go("secao", m, s + 1)
-    elif m + 1 < len(CURRICULUM):
-        go("secao", m + 1, 0)
+    nv = st.session_state.nivel_idx
+    ms = st.session_state.missao_idx
+    nivel = CURRICULUM[nv]
+    if ms + 1 < len(nivel["missoes"]):
+        go("missao", nv, ms + 1)
+    elif nv + 1 < len(CURRICULUM):
+        go("missao", nv + 1, 0)
     else:
         go("trilha")
 
@@ -511,60 +510,60 @@ def navigate_next():
 # ══════════════════════════════════════════════════════════════
 
 def render_progress_bar():
-    flat = get_flat_sections()
+    flat = get_flat_missoes()
     total = len(flat)
     done_count = len(st.session_state.completed)
     pct = int(done_count / total * 100) if total else 0
 
     circles = ""
-    prev_m = None
+    prev_nv = None
 
-    for idx, (m_idx, s_idx, sec) in enumerate(flat):
-        # Module separator
-        if prev_m is not None and m_idx != prev_m:
-            mod_label = CURRICULUM[m_idx]["short"]
+    for idx, (nv_idx, ms_idx, missao) in enumerate(flat):
+        # Nível separator
+        if prev_nv is not None and nv_idx != prev_nv:
+            nv_label = CURRICULUM[nv_idx]["short"]
             circles += (
                 f'<div class="pb-separator">'
-                f'  <div class="pb-sep-label">{mod_label}</div>'
+                f'  <div class="pb-sep-label">{nv_label}</div>'
                 f'  <div class="pb-sep-line"></div>'
                 f'</div>'
             )
-        elif prev_m is None:
-            # First module label
-            mod_label = CURRICULUM[m_idx]["short"]
+        elif prev_nv is None:
+            # First nivel label
+            nv_label = CURRICULUM[nv_idx]["short"]
             circles += (
                 f'<div class="pb-separator" style="margin-left:0;margin-right:6px">'
-                f'  <div class="pb-sep-label">{mod_label}</div>'
+                f'  <div class="pb-sep-label">{nv_label}</div>'
                 f'  <div class="pb-sep-line"></div>'
                 f'</div>'
             )
 
-        # Connector before dot (not first in module)
-        if prev_m == m_idx:
-            conn_cls = "pb-connector done" if is_done(m_idx, s_idx) else "pb-connector"
+        # Connector before dot (not first in nivel)
+        if prev_nv == nv_idx:
+            conn_cls = "pb-connector done" if is_done(nv_idx, ms_idx) else "pb-connector"
             circles += f'<div class="{conn_cls}"></div>'
 
         # Dot
         is_active = (
-            st.session_state.screen == "secao"
-            and m_idx == st.session_state.module_idx
-            and s_idx == st.session_state.section_idx
+            st.session_state.screen == "missao"
+            and nv_idx == st.session_state.nivel_idx
+            and ms_idx == st.session_state.missao_idx
         )
         if is_active:
             dot_cls = "pb-dot active"
-        elif is_done(m_idx, s_idx):
+        elif is_done(nv_idx, ms_idx):
             dot_cls = "pb-dot done"
         else:
             dot_cls = "pb-dot"
 
-        circles += f'<div class="{dot_cls}" title="{sec["title"]}"></div>'
-        prev_m = m_idx
+        circles += f'<div class="{dot_cls}" title="{missao["title"]}"></div>'
+        prev_nv = nv_idx
 
     html = f"""
     <div class="pb-wrap">
       <div class="pb-header">
         <span class="pb-title">Progresso da Trilha</span>
-        <span class="pb-percent">{done_count}/{total} seções &nbsp;·&nbsp; {pct}%</span>
+        <span class="pb-percent">{done_count}/{total} missões &nbsp;·&nbsp; {pct}%</span>
       </div>
       <div class="pb-track">{circles}</div>
     </div>
@@ -586,7 +585,7 @@ def render_sidebar():
         with col1:
             st.metric("Pontos", st.session_state.pontuacao)
         with col2:
-            st.metric("Nível", st.session_state.nivel)
+            st.metric("Nível", st.session_state.rank)
 
         st.divider()
 
@@ -611,11 +610,11 @@ render_sidebar()
 #  DIALOG — skip confirmation
 # ══════════════════════════════════════════════════════════════
 
-@st.dialog("Exercício não concluído")
+@st.dialog("Missão não concluída")
 def skip_dialog():
     st.markdown(
         "Tem certeza que quer prosseguir? "
-        "Você ainda não concluiu o exercício da seção atual."
+        "Você ainda não concluiu o exercício da missão atual."
     )
     st.markdown("Você pode voltar a qualquer momento para completá-lo.")
     col1, col2 = st.columns(2)
@@ -696,28 +695,28 @@ def screen_trilha():
     )
     st.markdown("---")
 
-    for m_idx, module in enumerate(CURRICULUM):
-        total_s = len(module["sections"])
-        done_s = sum(1 for s_idx in range(total_s) if is_done(m_idx, s_idx))
-        pts_total = total_s * 15
+    for nv_idx, nivel in enumerate(CURRICULUM):
+        total_ms = len(nivel["missoes"])
+        done_ms = sum(1 for ms_idx in range(total_ms) if is_done(nv_idx, ms_idx))
+        pts_total = total_ms * 15
 
         st.markdown(
             f'<div class="module-header">'
-            f'  <span class="module-title">{module["title"]}</span>'
-            f'  <span class="module-pts">{done_s}/{total_s} seções &nbsp;·&nbsp; {pts_total} pts</span>'
+            f'  <span class="module-title">{nivel["title"]}</span>'
+            f'  <span class="module-pts">{done_ms}/{total_ms} missões &nbsp;·&nbsp; {pts_total} pts</span>'
             f'</div>',
             unsafe_allow_html=True,
         )
 
-        for s_idx, section in enumerate(module["sections"]):
-            done = is_done(m_idx, s_idx)
+        for ms_idx, missao in enumerate(nivel["missoes"]):
+            done = is_done(nv_idx, ms_idx)
             status_icon = '<span class="material-symbols-rounded" style="color:#10b981;font-size:1rem;">check_circle</span>' if done else '<span class="material-symbols-rounded" style="color:#4b5563;font-size:1rem;">radio_button_unchecked</span>'
             col_sec, col_btn = st.columns([5, 1])
             with col_sec:
                 st.markdown(
                     f'<div class="section-row {"done" if done else ""}">'
                     f'  <span class="section-status">{status_icon}</span>'
-                    f'  <span class="section-name">{section["title"]}</span>'
+                    f'  <span class="section-name">{missao["title"]}</span>'
                     f'  <span class="section-pts">+15 pts</span>'
                     f'</div>',
                     unsafe_allow_html=True,
@@ -725,9 +724,9 @@ def screen_trilha():
             with col_btn:
                 btn_label = "Rever" if done else "Iniciar"
                 btn_icon = ":material/replay:" if done else ":material/play_arrow:"
-                if st.button(btn_label, icon=btn_icon, key=f"trl_{m_idx}_{s_idx}",
+                if st.button(btn_label, icon=btn_icon, key=f"trl_{nv_idx}_{ms_idx}",
                              type="primary" if not done else "secondary"):
-                    go("secao", m_idx, s_idx)
+                    go("missao", nv_idx, ms_idx)
 
         st.markdown("")
 
@@ -736,45 +735,45 @@ def screen_trilha():
 
 
 # ══════════════════════════════════════════════════════════════
-#  SCREEN: SEÇÃO
+#  SCREEN: MISSÃO
 # ══════════════════════════════════════════════════════════════
 
-def screen_secao():
-    m = st.session_state.module_idx
-    s = st.session_state.section_idx
-    module = CURRICULUM[m]
-    section = module["sections"][s]
-    is_last_in_module = (s == len(module["sections"]) - 1)
-    is_last_module = (m == len(CURRICULUM) - 1)
+def screen_missao():
+    nv = st.session_state.nivel_idx
+    ms = st.session_state.missao_idx
+    nivel = CURRICULUM[nv]
+    missao = nivel["missoes"][ms]
+    is_last_in_nivel = (ms == len(nivel["missoes"]) - 1)
+    is_last_nivel = (nv == len(CURRICULUM) - 1)
 
-    reset_exercise(m, s)
+    reset_exercise(nv, ms)
 
     render_progress_bar()
 
     # Breadcrumb
     col_bc, col_nav = st.columns([4, 1])
     with col_bc:
-        st.caption(f"{module['title']} › {section['title']}")
+        st.caption(f"{nivel['title']} › {missao['title']}")
     with col_nav:
         if st.button("Trilha", icon=":material/arrow_back:", key="back_to_trilha"):
             go("trilha")
 
-    st.markdown(f"# {section['title']}")
+    st.markdown(f"# {missao['title']}")
     st.markdown("---")
 
     # ── Theory ──────────────────────────────────────────────
     with st.container():
         st.markdown('<div class="theory-box">', unsafe_allow_html=True)
-        st.markdown(section["theory"])
+        st.markdown(missao["theory"])
         st.markdown("</div>", unsafe_allow_html=True)
 
     # ── Interactive placeholder ──────────────────────────────
-    st.info("**Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta seção será implementado aqui.")
+    st.info("**Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta missão será implementado aqui.")
 
     st.markdown("---")
 
     # ── Exercise ─────────────────────────────────────────────
-    ex = section["exercise"]
+    ex = missao["exercise"]
     st.markdown('<div class="exercise-box">', unsafe_allow_html=True)
     st.markdown('<div class="exercise-title">Exercício Prático</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="exercise-q">{ex["question"]}</div>', unsafe_allow_html=True)
@@ -784,7 +783,7 @@ def screen_secao():
         "Escolha sua resposta:",
         options=list(range(len(ex["options"]))),
         format_func=lambda i: ex["options"][i],
-        key=f"radio_{section['id']}",
+        key=f"radio_{missao['id']}",
         index=None if not st.session_state.ex_correct else ex["correct"],
         label_visibility="collapsed",
     )
@@ -793,14 +792,14 @@ def screen_secao():
 
     with col_test:
         test_disabled = st.session_state.ex_correct
-        if st.button("Testar", icon=":material/science:", key=f"test_{section['id']}",
+        if st.button("Testar", icon=":material/science:", key=f"test_{missao['id']}",
                      disabled=test_disabled, use_container_width=True):
             if selected is None:
                 st.warning("Selecione uma alternativa antes de testar.")
             else:
                 st.session_state.ex_submitted = True
                 if selected == ex["correct"]:
-                    complete_section(m, s)
+                    complete_missao(nv, ms)
                     st.rerun()
 
     # Feedback
@@ -812,23 +811,23 @@ def screen_secao():
 
     st.markdown("---")
 
-    # ── Module completion banner ──────────────────────────────
-    module_complete = m in st.session_state.modules_done
+    # ── Nivel completion banner ───────────────────────────────
+    nivel_completo = nv in st.session_state.niveis_concluidos
 
-    if is_last_in_module and module_complete:
+    if is_last_in_nivel and nivel_completo:
         st.markdown(
             f'<div class="completion-banner">'
-            f'  <h2>Módulo concluído!</h2>'
-            f'  <p>Você completou <strong>{module["title"]}</strong> e avançou para '
-            f'  o nível <strong>{st.session_state.nivel}</strong>!</p>'
+            f'  <h2>Nível concluído!</h2>'
+            f'  <p>Você completou <strong>{nivel["title"]}</strong> e avançou para '
+            f'  o rank <strong>{st.session_state.rank}</strong>!</p>'
             f'</div>',
             unsafe_allow_html=True,
         )
-        if not is_last_module:
-            next_module = CURRICULUM[m + 1]
-            if st.button(f"Seguir para {next_module['title']}", icon=":material/arrow_forward:",
-                         type="primary", key="next_module"):
-                go("secao", m + 1, 0)
+        if not is_last_nivel:
+            next_nivel = CURRICULUM[nv + 1]
+            if st.button(f"Seguir para {next_nivel['title']}", icon=":material/arrow_forward:",
+                         type="primary", key="next_nivel"):
+                go("missao", nv + 1, 0)
         else:
             st.balloons()
             st.markdown(
@@ -843,34 +842,33 @@ def screen_secao():
     else:
         # ── Navigation buttons ────────────────────────────────
         btn_cols = st.columns([1, 1, 3])
-        section_completed = st.session_state.ex_correct
+        missao_concluida = st.session_state.ex_correct
 
-        if is_last_in_module and not is_last_module:
-            next_label = f"Seguir para {CURRICULUM[m + 1]['title']}"
+        if is_last_in_nivel and not is_last_nivel:
+            next_label = f"Seguir para {CURRICULUM[nv + 1]['title']}"
             next_icon = ":material/arrow_forward:"
-        elif is_last_in_module and is_last_module:
+        elif is_last_in_nivel and is_last_nivel:
             next_label = "Finalizar trilha"
             next_icon = ":material/flag:"
         else:
-            next_module_sections = module["sections"]
-            next_sec = next_module_sections[s + 1] if s + 1 < len(next_module_sections) else None
-            next_label = f"Próxima: {next_sec['title']}" if next_sec else "Próxima seção"
+            next_ms = nivel["missoes"][ms + 1] if ms + 1 < len(nivel["missoes"]) else None
+            next_label = f"Próxima: {next_ms['title']}" if next_ms else "Próxima missão"
             next_icon = ":material/arrow_forward:"
 
         with btn_cols[0]:
-            # Previous section
-            if s > 0:
-                if st.button("Anterior", icon=":material/arrow_back:", key="prev_sec"):
-                    go("secao", m, s - 1)
-            elif m > 0:
-                prev_module = CURRICULUM[m - 1]
-                if st.button("Anterior", icon=":material/arrow_back:", key="prev_sec_mod"):
-                    go("secao", m - 1, len(prev_module["sections"]) - 1)
+            # Previous missao
+            if ms > 0:
+                if st.button("Anterior", icon=":material/arrow_back:", key="prev_ms"):
+                    go("missao", nv, ms - 1)
+            elif nv > 0:
+                prev_nivel = CURRICULUM[nv - 1]
+                if st.button("Anterior", icon=":material/arrow_back:", key="prev_ms_nv"):
+                    go("missao", nv - 1, len(prev_nivel["missoes"]) - 1)
 
         with btn_cols[1]:
-            btn_type = "primary" if section_completed else "secondary"
-            if st.button(next_label, icon=next_icon, type=btn_type, key="next_sec", use_container_width=True):
-                if section_completed:
+            btn_type = "primary" if missao_concluida else "secondary"
+            if st.button(next_label, icon=next_icon, type=btn_type, key="next_ms", use_container_width=True):
+                if missao_concluida:
                     navigate_next()
                 else:
                     skip_dialog()
@@ -886,5 +884,5 @@ if screen == "dashboard":
     screen_dashboard()
 elif screen == "trilha":
     screen_trilha()
-elif screen == "secao":
-    screen_secao()
+elif screen == "missao":
+    screen_missao()

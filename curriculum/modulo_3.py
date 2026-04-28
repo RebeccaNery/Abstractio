@@ -1,16 +1,16 @@
-MODULO_3 = {
+NIVEL_3 = {
     "id": 2,
-    "title": "Módulo 3 — A sociedade dos objetos",
+    "title": "Nível 3 — A sociedade dos objetos",
     "short": "Relações",
-    "sections": [
+    "missoes": [
         {
             "id": "2-0",
-            "title": "Introdução ao módulo",
+            "title": "Introdução ao nível",
             "icon": "🏙️",
             "theory": """
 ## A sociedade dos objetos — Mecânica e Relações
 
-Nos módulos anteriores você aprendeu a criar objetos e a aplicar os 4 pilares. Agora vamos explorar como objetos **interagem entre si**.
+Nos níveis anteriores você aprendeu a criar objetos e a aplicar os 4 pilares. Agora vamos explorar como objetos **interagem entre si**.
 
 Em sistemas reais, objetos raramente vivem isolados. Eles se comunicam, dependem uns dos outros e formam estruturas complexas — como uma sociedade.
 
@@ -433,7 +433,7 @@ Modelar relações corretamente impacta:
 - **Responsabilidade** por memória e recursos
 - **Flexibilidade** do design (o que pode ser trocado ou reutilizado)
 
-> As próximas seções detalham cada tipo com exemplos práticos.
+> As próximas missões detalham cada tipo com exemplos práticos.
 """,
             "exercise": {
                 "question": "Qual pergunta central diferencia os 3 tipos de relacionamento entre objetos?",
@@ -739,7 +739,7 @@ pedido.adicionar(caderno)
 print(pedido.finalizar(CartaoCredito()))
 ```
 
-> Próximo módulo: **engenharia e qualidade** — como escrever código que dura.
+> Próximo nível: **engenharia e qualidade** — como escrever código que dura.
 """,
             "exercise": {
                 "question": "Em um sistema de biblioteca, livros existem antes e independente de uma coleção, e podem pertencer a várias coleções. Qual relacionamento modela isso?",

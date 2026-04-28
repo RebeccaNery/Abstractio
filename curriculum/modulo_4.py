@@ -1,11 +1,11 @@
-MODULO_4 = {
+NIVEL_4 = {
     "id": 3,
-    "title": "Módulo 4 — O arquiteto mestre",
+    "title": "Nível 4 — O arquiteto mestre",
     "short": "Arquitetura",
-    "sections": [
+    "missoes": [
         {
             "id": "3-0",
-            "title": "Introdução ao módulo",
+            "title": "Introdução ao nível",
             "icon": "🏛️",
             "theory": """
 ## O arquiteto mestre — Engenharia e Qualidade
@@ -515,7 +515,7 @@ Parabéns! Você concluiu a trilha completa de Orientação a Objetos.
 
 ### O que você domina agora
 
-| Módulo | Conquista |
+| Nível | Conquista |
 |---|---|
 | **Fundamentos** | Criar classes, objetos, métodos e construtores |
 | **Pilares** | Aplicar abstração, encapsulamento, herança e polimorfismo |

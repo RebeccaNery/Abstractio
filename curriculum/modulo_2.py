@@ -1,16 +1,16 @@
-MODULO_2 = {
+NIVEL_2 = {
     "id": 1,
-    "title": "Módulo 2 — As leis do mundo",
+    "title": "Nível 2 — As leis do mundo",
     "short": "Pilares",
-    "sections": [
+    "missoes": [
         {
             "id": "1-0",
-            "title": "Introdução ao módulo",
+            "title": "Introdução ao nível",
             "icon": "🌍",
             "theory": """
 ## As leis do mundo — Os 4 Pilares da POO
 
-Se o Módulo 1 te ensinou a **criar** objetos, este módulo te ensina as **leis** que governam como bons objetos se comportam.
+Se o Nível 1 te ensinou a **criar** objetos, este nível te ensina as **leis** que governam como bons objetos se comportam.
 
 Os 4 pilares não são recursos isolados — são princípios que trabalham juntos para tornar o código:
 
@@ -28,7 +28,7 @@ Os 4 pilares não são recursos isolados — são princípios que trabalham junt
 | **Herança** | Reutilizar | Como reaproveitar comportamentos existentes? |
 | **Polimorfismo** | Uniformizar | Como tratar objetos diferentes da mesma forma? |
 
-> Cada seção a seguir explora um pilar com exemplos práticos. Ao final, você verá como eles se complementam.
+> Cada missão a seguir explora um pilar com exemplos práticos. Ao final, você verá como eles se complementam.
 """,
             "exercise": {
                 "question": "Qual é o principal objetivo dos 4 pilares da POO?",
@@ -348,7 +348,7 @@ for v in frota:
     print(v.mover())           # Polimorfismo
 ```
 
-> Próximo módulo: como objetos se **relacionam** entre si — sobrescrita, contratos e associações.
+> Próximo nível: como objetos se **relacionam** entre si — sobrescrita, contratos e associações.
 """,
             "exercise": {
                 "question": "Qual pilar garante que código genérico possa operar sobre diferentes tipos de objeto sem precisar conhecê-los individualmente?",

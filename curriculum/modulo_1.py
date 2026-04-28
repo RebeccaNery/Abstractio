@@ -1,8 +1,8 @@
-MODULO_1 = {
+NIVEL_1 = {
     "id": 0,
-    "title": "Módulo 1 — Fundamentos",
+    "title": "Nível 1 — Fundamentos",
     "short": "Fundamentos",
-    "sections": [
+    "missoes": [
         {
             "id": "0-0",
             "title": "O que é POO?",
@@ -13,15 +13,6 @@ MODULO_1 = {
 A **Programação Orientada a Objetos (POO)** é um paradigma que organiza o software em torno de **objetos** — entidades que combinam dados (atributos) e comportamentos (métodos).
 
 Em vez de uma sequência linear de instruções, você pensa em um conjunto de objetos que colaboram entre si.
-
-### Os 4 pilares da POO
-
-| Pilar | Definição |
-|---|---|
-| **Encapsulamento** | Esconder a complexidade interna |
-| **Herança** | Reutilizar e estender comportamentos |
-| **Polimorfismo** | Tratar objetos distintos de forma uniforme |
-| **Abstração** | Focar no essencial, ignorar detalhes |
 
 ### Exemplo inicial
 
@@ -258,7 +249,7 @@ def __del__(self):
             "theory": """
 ## Resumo — Fundamentos
 
-Você concluiu o primeiro módulo! Veja os conceitos que domina agora:
+Você concluiu o primeiro nível! Veja os conceitos que domina agora:
 
 ### O que você aprendeu
 
@@ -297,7 +288,7 @@ print(livro1)                # Clean Code (Robert Martin) — ✓ lido
 print(livro2)                # O Poder do Hábito (Charles Duhigg) — pendente
 ```
 
-> Próximo módulo: os **4 pilares da POO** — os princípios que tornam o código orientado a objetos poderoso.
+> Próximo nível: os **4 pilares da POO** — os princípios que tornam o código orientado a objetos poderoso.
 """,
             "exercise": {
                 "question": "Qual sequência representa corretamente a relação entre classe, construtor e objeto?",
