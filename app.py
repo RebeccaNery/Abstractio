@@ -22,11 +22,41 @@ with open("styles.css") as _f:
 
 NIVEL_NOMES = ["Polvinho", "Explorador", "Mestre dos Mares", "Kraken"]
 
-EMBLEMAS_MAP = {
-    50:  "Encapsuladora Iniciante",
-    100: "Mestre da Herança",
-    150: "Rainha da Abstração",
-    200: "Polimorfista Suprema",
+EMBLEMAS = {
+    # Nível 1 — Fundamentos
+    "0-0": {"nome": "Descobridora do Paradigma", "icon": "🧩"},
+    "0-1": {"nome": "Escultora de Classes",       "icon": "🏛️"},
+    "0-2": {"nome": "Criadora de Objetos",        "icon": "🐙"},
+    "0-3": {"nome": "Invocadora de Métodos",      "icon": "⚡"},
+    "0-4": {"nome": "Mestra do Construtor",       "icon": "🔨"},
+    "0-5": {"nome": "Fundamentos Dominados",      "icon": "⭐"},
+    # Nível 2 — As leis do mundo
+    "1-0": {"nome": "Exploradora dos Pilares",    "icon": "🌊"},
+    "1-1": {"nome": "Pensadora Abstrata",         "icon": "💭"},
+    "1-2": {"nome": "Guardiã do Segredo",         "icon": "🔒"},
+    "1-3": {"nome": "Herdeira do Código",         "icon": "🧬"},
+    "1-4": {"nome": "Mestra das Formas",          "icon": "🦋"},
+    "1-5": {"nome": "Pilares Conquistados",       "icon": "🏆"},
+    # Nível 3 — A sociedade dos objetos
+    "2-0":  {"nome": "Exploradora das Relações",  "icon": "🗺️"},
+    "2-1":  {"nome": "Reescritora de Leis",       "icon": "✍️"},
+    "2-2":  {"nome": "Sobrecarregada de Poder",   "icon": "⚡"},
+    "2-3":  {"nome": "Firmadora de Contratos",    "icon": "📜"},
+    "2-4":  {"nome": "Arquiteta de Interfaces",   "icon": "🔌"},
+    "2-5":  {"nome": "Mestra da Abstração",       "icon": "🎭"},
+    "2-6":  {"nome": "Conectora de Mundos",       "icon": "🕸️"},
+    "2-7":  {"nome": "Tecelã de Associações",     "icon": "🧵"},
+    "2-8":  {"nome": "Guardiã da Agregação",      "icon": "🫧"},
+    "2-9":  {"nome": "Compositora de Sistemas",   "icon": "🎼"},
+    "2-10": {"nome": "Sociedade Dominada",        "icon": "🌐"},
+    # Nível 4 — O arquiteto mestre
+    "3-0": {"nome": "Aprendiz da Arquitetura",    "icon": "🏗️"},
+    "3-1": {"nome": "Mestra da Coesão",           "icon": "🎯"},
+    "3-2": {"nome": "Redutora do Acoplamento",    "icon": "⚗️"},
+    "3-3": {"nome": "Princesa SOLID",             "icon": "💎"},
+    "3-4": {"nome": "Domadora dos Generics",      "icon": "🧲"},
+    "3-5": {"nome": "Conhecedora dos Padrões",    "icon": "🗝️"},
+    "3-6": {"nome": "Arquiteta Mestre",           "icon": "👑"},
 }
 
 # ══════════════════════════════════════════════════════════════
@@ -43,7 +73,6 @@ def _init():
         "nivel_nome_idx":      0,
         "completed":           set(),   # set of "nv-ms" strings
         "niveis_concluidos":   set(),   # set of nivel indices
-        "emblemas":            [],
         "first_visit":         True,
         # per-missao exercise state (keyed so navigating resets it)
         "ex_key":              "",      # current missao id
@@ -91,13 +120,7 @@ def reset_exercise(nv, ms):
 
 
 def _award_points(n):
-    old = st.session_state.pontuacao
     st.session_state.pontuacao += n
-    new = st.session_state.pontuacao
-    for threshold, badge in EMBLEMAS_MAP.items():
-        if old < threshold <= new and badge not in st.session_state.emblemas:
-            st.session_state.emblemas.append(badge)
-            st.toast(f"Emblema desbloqueado: {badge}!", icon=":material/military_tech:")
 
 
 def complete_missao(nv, ms):
@@ -107,6 +130,9 @@ def complete_missao(nv, ms):
         st.session_state.ex_correct = True
         _award_points(15)
         st.toast("+15 pontos! Continue assim!", icon=":material/star:")
+        emb = EMBLEMAS.get(key)
+        if emb:
+            st.toast(f"{emb['icon']} Troféu desbloqueado: {emb['nome']}!", icon=":material/military_tech:")
         nivel = CURRICULUM[nv]
         needed = {missao_key(nv, i) for i in range(len(nivel["missoes"]))}
         if needed.issubset(st.session_state.completed) and nv not in st.session_state.niveis_concluidos:
@@ -226,11 +252,9 @@ def render_sidebar():
                      type="primary" if st.session_state.screen == "trilha" else "secondary"):
             go("trilha")
 
-        if st.session_state.emblemas:
-            st.divider()
-            st.markdown("**Emblemas**")
-            for badge in st.session_state.emblemas:
-                st.markdown(f'<span class="badge">{badge}</span>', unsafe_allow_html=True)
+        if st.button("Conquistas", icon=":material/military_tech:", use_container_width=True,
+                     type="primary" if st.session_state.screen == "conquistas" else "secondary"):
+            go("conquistas")
 
 
 render_sidebar()
@@ -506,6 +530,52 @@ def screen_missao():
 
 
 # ══════════════════════════════════════════════════════════════
+#  SCREEN: CONQUISTAS
+# ══════════════════════════════════════════════════════════════
+
+def screen_conquistas():
+    render_progress_bar()
+    st.markdown("# Conquistas")
+    st.caption("Cada missão concluída desbloqueia um troféu.")
+
+    completed = st.session_state.completed
+
+    for nivel in CURRICULUM:
+        st.markdown(f"### {nivel['title']}")
+
+        earned_html   = ""
+        unearned_html = ""
+
+        for missao in nivel["missoes"]:
+            mid = missao["id"]
+            emb = EMBLEMAS.get(mid)
+            if not emb:
+                continue
+            card = (
+                f'<div class="trophy-card {"earned" if mid in completed else "unearned"}">'
+                f'  <div class="trophy-icon">{emb["icon"]}</div>'
+                f'  <div class="trophy-nome">{emb["nome"]}</div>'
+                f'</div>'
+            )
+            if mid in completed:
+                earned_html += card
+            else:
+                unearned_html += card
+
+        if earned_html:
+            st.markdown(f'<div class="trophy-shelf">{earned_html}</div>', unsafe_allow_html=True)
+        else:
+            st.caption("Nenhum troféu conquistado neste nível ainda.")
+
+        if unearned_html:
+            unearned_count = unearned_html.count("trophy-card")
+            with st.expander(f"Ver {unearned_count} troféu(s) por conquistar"):
+                st.markdown(f'<div class="trophy-shelf">{unearned_html}</div>', unsafe_allow_html=True)
+
+        st.markdown("---")
+
+
+# ══════════════════════════════════════════════════════════════
 #  ROUTER
 # ══════════════════════════════════════════════════════════════
 
@@ -517,3 +587,5 @@ elif screen == "trilha":
     screen_trilha()
 elif screen == "missao":
     screen_missao()
+elif screen == "conquistas":
+    screen_conquistas()
