@@ -391,9 +391,7 @@ def screen_missao():
     st.markdown("---")
 
     # ── Theory ──────────────────────────────────────────────
-    with st.container():
-        st.markdown('<span class="theory-marker"></span>', unsafe_allow_html=True)
-        st.markdown(missao["theory"])
+    st.markdown(missao["theory"])
 
     # ── Interactive placeholder ──────────────────────────────
     st.info("**Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta missão será implementado aqui.")

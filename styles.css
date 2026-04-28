@@ -311,16 +311,6 @@ hr {
 .module-pts { font-size: 0.9rem; font-weight: 600; color: #a78bfa; background: #1e1e35;
               padding: 4px 14px; border-radius: 20px; border: 1px solid #4c3a8a; }
 
-/* ── Theory area ─────────────────────────────────── */
-.theory-marker { display: none; }
-div[data-testid="stVerticalBlock"]:has(.theory-marker) {
-    background: #1a1a2e;
-    border: 1px solid #2d2d44;
-    border-radius: 12px;
-    padding: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-
 /* ── Exercise area ───────────────────────────────── */
 .exercise-box {
     background: #12122a;
