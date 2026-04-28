@@ -20,7 +20,7 @@ with open("styles.css") as _f:
 #  CONSTANTS
 # ══════════════════════════════════════════════════════════════
 
-RANKS = ["Iniciante", "Estagiário", "Júnior", "Pleno", "Sênior"]
+NIVEL_NOMES = ["Polvinho", "Explorador", "Mestre dos Mares", "Kraken"]
 
 EMBLEMAS_MAP = {
     50:  "Encapsuladora Iniciante",
@@ -39,8 +39,8 @@ def _init():
         "nivel_idx":           0,   # índice do nível no currículo
         "missao_idx":          0,
         "pontuacao":           10,
-        "rank":                "Iniciante",
-        "rank_idx":            0,
+        "nivel_nome":          "Polvinho",
+        "nivel_nome_idx":      0,
         "completed":           set(),   # set of "nv-ms" strings
         "niveis_concluidos":   set(),   # set of nivel indices
         "emblemas":            [],
@@ -111,15 +111,15 @@ def complete_missao(nv, ms):
         needed = {missao_key(nv, i) for i in range(len(nivel["missoes"]))}
         if needed.issubset(st.session_state.completed) and nv not in st.session_state.niveis_concluidos:
             st.session_state.niveis_concluidos = st.session_state.niveis_concluidos | {nv}
-            _rank_up()
+            _atualizar_nivel_nome()
 
 
-def _rank_up():
-    idx = st.session_state.rank_idx
-    if idx < len(RANKS) - 1:
-        st.session_state.rank_idx += 1
-        st.session_state.rank = RANKS[st.session_state.rank_idx]
-        st.toast(f"Você evoluiu para **{st.session_state.rank}**!", icon=":material/trending_up:")
+def _atualizar_nivel_nome():
+    new_idx = min(len(st.session_state.niveis_concluidos), len(NIVEL_NOMES) - 1)
+    if new_idx > st.session_state.nivel_nome_idx:
+        st.session_state.nivel_nome_idx = new_idx
+        st.session_state.nivel_nome = NIVEL_NOMES[new_idx]
+        st.toast(f"Você evoluiu para **{NIVEL_NOMES[new_idx]}**!", icon=":material/trending_up:")
 
 
 def navigate_next():
@@ -214,7 +214,7 @@ def render_sidebar():
         with col1:
             st.metric("Pontos", st.session_state.pontuacao)
         with col2:
-            st.metric("Nível", st.session_state.rank)
+            st.metric("Nível", st.session_state.nivel_nome)
 
         st.divider()
 
@@ -449,8 +449,7 @@ def screen_missao():
         st.markdown(
             f'<div class="completion-banner">'
             f'  <h2>Nível concluído!</h2>'
-            f'  <p>Você completou <strong>{nivel["title"]}</strong> e avançou para '
-            f'  o rank <strong>{st.session_state.rank}</strong>!</p>'
+            f'  <p>Você completou <strong>{nivel["title"]}</strong> e virou <strong>{st.session_state.nivel_nome}</strong>!</p>'
             f'</div>',
             unsafe_allow_html=True,
         )

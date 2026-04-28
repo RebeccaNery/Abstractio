@@ -2,6 +2,10 @@
 
 App educacional gamificado para ensinar POO em Python, construído com Streamlit.
 
+## Regras de colaboração
+
+- **Nunca realizar mudanças ou implementações sem confirmação prévia da Rebecca.** Apresente a proposta, aguarde aprovação, só então execute.
+
 ## Convenções de git
 
 - Mensagens de commit sempre em **Português do Brasil**
@@ -77,10 +81,10 @@ NIVEL_N = {
 | `completed` | set | Strings `"nv-ms"` das missões concluídas |
 | `niveis_concluidos` | set | Índices dos níveis 100% completos |
 | `pontuacao` | int | Pontos totais do usuário |
-| `rank` | str | Rank de gamificação (Iniciante → Sênior) |
-| `rank_idx` | int | Índice do rank atual em `RANKS` |
+| `nivel_nome` | str | Nome do nível de gamificação (Polvinho → Kraken) |
+| `nivel_nome_idx` | int | Índice do nome atual em `NIVEL_NOMES` |
 
-> `rank`/`rank_idx` são o sistema de gamificação. Não confundir com `nivel_idx`, que é a posição no currículo.
+> `nivel_nome`/`nivel_nome_idx` são o sistema de gamificação. Não confundir com `nivel_idx`, que é a posição no currículo.
 
 ## Screens (rotas internas)
 
@@ -123,5 +127,5 @@ MISSAO = {
 
 - +15 pts por missão concluída
 - Completar um nível inteiro sobe o rank
-- Ranks: Iniciante → Estagiário → Júnior → Pleno → Sênior
+- Nomes de nível (`NIVEL_NOMES`): Polvinho → Explorador → Mestre dos Mares → Kraken
 - Emblemas desbloqueados em 50 / 100 / 150 / 200 pts
