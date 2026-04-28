@@ -89,8 +89,10 @@ NIVEL_N = {
 ## Screens (rotas internas)
 
 - `"dashboard"` — tela inicial com hero e cards
-- `"trilha"` — lista de todos os níveis e missões
+- `"trilhas"` — visão geral das trilhas disponíveis (Minhas Trilhas)
+- `"trilha"` — mapa de missões da trilha POO (acessível via "Minhas Trilhas" ou Dashboard)
 - `"missao"` — conteúdo de uma missão (teoria + exercício)
+- `"conquistas"` — estante de troféus por missão concluída
 
 ## Estrutura de um arquivo de missão (`missao_N.py`)
 

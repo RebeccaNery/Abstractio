@@ -370,6 +370,64 @@ hr {
     border: 1px solid #3d3d5e !important;
 }
 
+/* ── Trail cards (minhas trilhas) ───────────────── */
+.trail-card {
+    background: #1a1a2e;
+    border: 1px solid #7c3aed;
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+.trail-card--locked {
+    border-color: #2d2d44;
+    opacity: 0.45;
+    pointer-events: none;
+}
+.trail-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.trail-icon { font-size: 2.2rem; line-height: 1; }
+.trail-info  { flex: 1; }
+.trail-title { font-size: 1.05rem; font-weight: 700; color: #c4b5fd; margin-bottom: 0.2rem; }
+.trail-sub   { font-size: 0.82rem; color: #64748b; }
+.trail-desc  { font-size: 0.88rem; color: #64748b; line-height: 1.5; }
+.trail-badge {
+    background: linear-gradient(135deg, #4c1d95, #7c3aed);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.trail-lock { font-size: 1.3rem; opacity: 0.5; }
+.trail-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.trail-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #2d2d44;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.trail-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7c3aed, #10b981);
+    border-radius: 4px;
+}
+.trail-pct {
+    font-size: 0.82rem;
+    color: #a78bfa;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 /* ── Trophy shelf (conquistas) ───────────────────── */
 .trophy-shelf {
     display: flex;

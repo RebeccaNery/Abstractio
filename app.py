@@ -248,9 +248,9 @@ def render_sidebar():
                      type="primary" if st.session_state.screen == "dashboard" else "secondary"):
             go("dashboard")
 
-        if st.button("Trilha POO", icon=":material/map:", use_container_width=True,
-                     type="primary" if st.session_state.screen == "trilha" else "secondary"):
-            go("trilha")
+        if st.button("Minhas Trilhas", icon=":material/map:", use_container_width=True,
+                     type="primary" if st.session_state.screen == "trilhas" else "secondary"):
+            go("trilhas")
 
         if st.button("Conquistas", icon=":material/military_tech:", use_container_width=True,
                      type="primary" if st.session_state.screen == "conquistas" else "secondary"):
@@ -300,7 +300,7 @@ def screen_dashboard():
     col_btn, _, _ = st.columns([1, 2, 1])
     with col_btn:
         if st.button("Comece já", icon=":material/rocket_launch:", type="primary", use_container_width=True):
-            go("trilha")
+            go("trilhas")
 
     st.markdown("---")
     st.markdown("### Destaques")
@@ -328,7 +328,7 @@ def screen_dashboard():
             if not muted:
                 st.write("")
                 if st.button("Explorar", icon=":material/arrow_forward:", key="hero_explore", type="primary"):
-                    go("trilha")
+                    go("trilhas")
             else:
                 st.markdown('<p style="color:#555570;font-size:0.75rem;margin-top:0.5rem;">em breve</p>', unsafe_allow_html=True)
 
@@ -530,6 +530,65 @@ def screen_missao():
 
 
 # ══════════════════════════════════════════════════════════════
+#  SCREEN: MINHAS TRILHAS
+# ══════════════════════════════════════════════════════════════
+
+def screen_trilhas():
+    st.markdown("# Minhas Trilhas")
+    st.caption("Acompanhe seu progresso em cada trilha de aprendizado.")
+    st.markdown("---")
+
+    total = get_total_missoes()
+    done  = len(st.session_state.completed)
+    pct   = int(done / total * 100) if total else 0
+
+    st.markdown(
+        f'<div class="trail-card">'
+        f'  <div class="trail-header">'
+        f'    <div class="trail-icon">🐙</div>'
+        f'    <div class="trail-info">'
+        f'      <div class="trail-title">Orientação a Objetos</div>'
+        f'      <div class="trail-sub">Python · {total} missões · 4 níveis</div>'
+        f'    </div>'
+        f'    <div class="trail-badge">{st.session_state.nivel_nome}</div>'
+        f'  </div>'
+        f'  <div class="trail-progress-wrap">'
+        f'    <div class="trail-progress-bar">'
+        f'      <div class="trail-progress-fill" style="width:{pct}%"></div>'
+        f'    </div>'
+        f'    <span class="trail-pct">{done}/{total} missões · {pct}%</span>'
+        f'  </div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("Acessar trilha", icon=":material/arrow_forward:", type="primary", key="acessar_poo"):
+        go("trilha")
+
+    st.markdown("### Em breve")
+    cols = st.columns(2)
+    futuras = [
+        ("📊", "Estruturas de Dados", "Do array ao grafo, domine como organizar dados de forma eficiente."),
+        ("📌", "Ponteiros",           "Domine boas ordenações e eficiência computacional com exemplos reais."),
+    ]
+    for col, (icon, title, desc) in zip(cols, futuras):
+        with col:
+            st.markdown(
+                f'<div class="trail-card trail-card--locked">'
+                f'  <div class="trail-header">'
+                f'    <div class="trail-icon">{icon}</div>'
+                f'    <div class="trail-info">'
+                f'      <div class="trail-title">{title}</div>'
+                f'      <div class="trail-sub">Em breve</div>'
+                f'    </div>'
+                f'    <div class="trail-lock">🔒</div>'
+                f'  </div>'
+                f'  <div class="trail-desc">{desc}</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+
+
+# ══════════════════════════════════════════════════════════════
 #  SCREEN: CONQUISTAS
 # ══════════════════════════════════════════════════════════════
 
@@ -583,6 +642,8 @@ screen = st.session_state.screen
 
 if screen == "dashboard":
     screen_dashboard()
+elif screen == "trilhas":
+    screen_trilhas()
 elif screen == "trilha":
     screen_trilha()
 elif screen == "missao":
