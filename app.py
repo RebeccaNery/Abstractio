@@ -1,4 +1,5 @@
 import streamlit as st
+
 from curriculum import CURRICULUM, get_flat_missoes, get_total_missoes
 
 st.set_page_config(
@@ -24,39 +25,39 @@ NIVEL_NOMES = ["Polvinho", "Explorador", "Mestre dos Mares", "Kraken"]
 
 EMBLEMAS = {
     # Nível 1 — Fundamentos
-    "0-0": {"nome": "Descobridora do Paradigma", "icon": "🧩"},
-    "0-1": {"nome": "Escultora de Classes",       "icon": "🏛️"},
-    "0-2": {"nome": "Criadora de Objetos",        "icon": "🐙"},
-    "0-3": {"nome": "Invocadora de Métodos",      "icon": "⚡"},
-    "0-4": {"nome": "Mestra do Construtor",       "icon": "🔨"},
-    "0-5": {"nome": "Fundamentos Dominados",      "icon": "⭐"},
+    "0-0": {"nome_f": "Descobridora do Paradigma", "nome_m": "Descobridor do Paradigma",  "icon": "🧩"},
+    "0-1": {"nome_f": "Escultora de Classes",       "nome_m": "Escultor de Classes",        "icon": "🏛️"},
+    "0-2": {"nome_f": "Criadora de Objetos",        "nome_m": "Criador de Objetos",         "icon": "🐙"},
+    "0-3": {"nome_f": "Invocadora de Métodos",      "nome_m": "Invocador de Métodos",       "icon": "⚡"},
+    "0-4": {"nome_f": "Mestra do Construtor",       "nome_m": "Mestre do Construtor",       "icon": "🔨"},
+    "0-5": {"nome_f": "Fundamentos Dominados",      "nome_m": "Fundamentos Dominados",      "icon": "⭐"},
     # Nível 2 — As leis do mundo
-    "1-0": {"nome": "Exploradora dos Pilares",    "icon": "🌊"},
-    "1-1": {"nome": "Pensadora Abstrata",         "icon": "💭"},
-    "1-2": {"nome": "Guardiã do Segredo",         "icon": "🔒"},
-    "1-3": {"nome": "Herdeira do Código",         "icon": "🧬"},
-    "1-4": {"nome": "Mestra das Formas",          "icon": "🦋"},
-    "1-5": {"nome": "Pilares Conquistados",       "icon": "🏆"},
+    "1-0": {"nome_f": "Exploradora dos Pilares",    "nome_m": "Explorador dos Pilares",     "icon": "🌊"},
+    "1-1": {"nome_f": "Pensadora Abstrata",         "nome_m": "Pensador Abstrato",          "icon": "💭"},
+    "1-2": {"nome_f": "Guardiã do Segredo",         "nome_m": "Guardião do Segredo",        "icon": "🔒"},
+    "1-3": {"nome_f": "Herdeira do Código",         "nome_m": "Herdeiro do Código",         "icon": "🧬"},
+    "1-4": {"nome_f": "Mestra das Formas",          "nome_m": "Mestre das Formas",          "icon": "🦋"},
+    "1-5": {"nome_f": "Pilares Conquistados",       "nome_m": "Pilares Conquistados",       "icon": "🏆"},
     # Nível 3 — A sociedade dos objetos
-    "2-0":  {"nome": "Exploradora das Relações",  "icon": "🗺️"},
-    "2-1":  {"nome": "Reescritora de Leis",       "icon": "✍️"},
-    "2-2":  {"nome": "Sobrecarregada de Poder",   "icon": "⚡"},
-    "2-3":  {"nome": "Firmadora de Contratos",    "icon": "📜"},
-    "2-4":  {"nome": "Arquiteta de Interfaces",   "icon": "🔌"},
-    "2-5":  {"nome": "Mestra da Abstração",       "icon": "🎭"},
-    "2-6":  {"nome": "Conectora de Mundos",       "icon": "🕸️"},
-    "2-7":  {"nome": "Tecelã de Associações",     "icon": "🧵"},
-    "2-8":  {"nome": "Guardiã da Agregação",      "icon": "🫧"},
-    "2-9":  {"nome": "Compositora de Sistemas",   "icon": "🎼"},
-    "2-10": {"nome": "Sociedade Dominada",        "icon": "🌐"},
+    "2-0":  {"nome_f": "Exploradora das Relações",  "nome_m": "Explorador das Relações",    "icon": "🗺️"},
+    "2-1":  {"nome_f": "Reescritora de Leis",       "nome_m": "Reescritor de Leis",         "icon": "✍️"},
+    "2-2":  {"nome_f": "Sobrecarregada de Poder",   "nome_m": "Sobrecarregado de Poder",    "icon": "⚡"},
+    "2-3":  {"nome_f": "Firmadora de Contratos",    "nome_m": "Firmador de Contratos",      "icon": "📜"},
+    "2-4":  {"nome_f": "Arquiteta de Interfaces",   "nome_m": "Arquiteto de Interfaces",    "icon": "🔌"},
+    "2-5":  {"nome_f": "Mestra da Abstração",       "nome_m": "Mestre da Abstração",        "icon": "🎭"},
+    "2-6":  {"nome_f": "Conectora de Mundos",       "nome_m": "Conector de Mundos",         "icon": "🕸️"},
+    "2-7":  {"nome_f": "Tecelã de Associações",     "nome_m": "Tecelão de Associações",     "icon": "🧵"},
+    "2-8":  {"nome_f": "Guardiã da Agregação",      "nome_m": "Guardião da Agregação",      "icon": "🫧"},
+    "2-9":  {"nome_f": "Compositora de Sistemas",   "nome_m": "Compositor de Sistemas",     "icon": "🎼"},
+    "2-10": {"nome_f": "Sociedade Dominada",        "nome_m": "Sociedade Dominada",         "icon": "🌐"},
     # Nível 4 — O arquiteto mestre
-    "3-0": {"nome": "Aprendiz da Arquitetura",    "icon": "🏗️"},
-    "3-1": {"nome": "Mestra da Coesão",           "icon": "🎯"},
-    "3-2": {"nome": "Redutora do Acoplamento",    "icon": "⚗️"},
-    "3-3": {"nome": "Princesa SOLID",             "icon": "💎"},
-    "3-4": {"nome": "Domadora dos Generics",      "icon": "🧲"},
-    "3-5": {"nome": "Conhecedora dos Padrões",    "icon": "🗝️"},
-    "3-6": {"nome": "Arquiteta Mestre",           "icon": "👑"},
+    "3-0": {"nome_f": "Aprendiz da Arquitetura",    "nome_m": "Aprendiz da Arquitetura",    "icon": "🏗️"},
+    "3-1": {"nome_f": "Mestra da Coesão",           "nome_m": "Mestre da Coesão",           "icon": "🎯"},
+    "3-2": {"nome_f": "Redutora do Acoplamento",    "nome_m": "Redutor do Acoplamento",     "icon": "⚗️"},
+    "3-3": {"nome_f": "Princesa SOLID",             "nome_m": "Príncipe SOLID",             "icon": "💎"},
+    "3-4": {"nome_f": "Domadora dos Generics",      "nome_m": "Domador dos Generics",       "icon": "🧲"},
+    "3-5": {"nome_f": "Conhecedora dos Padrões",    "nome_m": "Conhecedor dos Padrões",     "icon": "🗝️"},
+    "3-6": {"nome_f": "Arquiteta Mestre",           "nome_m": "Arquiteto Mestre",           "icon": "👑"},
 }
 
 # ══════════════════════════════════════════════════════════════
@@ -74,6 +75,9 @@ def _init():
         "completed":           set(),   # set of "nv-ms" strings
         "niveis_concluidos":   set(),   # set of nivel indices
         "new_emblema":         None,    # id da missão recém-concluída (para o dialog)
+        "nome":                "",
+        "genero":              "feminino",
+        "avatar":              "🐙",
         "first_visit":         True,
         # per-missao exercise state (keyed so navigating resets it)
         "ex_key":              "",      # current missao id
@@ -94,6 +98,16 @@ if st.session_state.first_visit:
 # ══════════════════════════════════════════════════════════════
 #  HELPERS
 # ══════════════════════════════════════════════════════════════
+
+def get_emblema_nome(emb):
+    genero = st.session_state.genero
+    if genero == "feminino":
+        return emb["nome_f"]
+    if genero == "masculino":
+        return emb["nome_m"]
+    partes = emb["nome_m"].split(" ", 1)
+    return partes[0] + "(a)" + (" " + partes[1] if len(partes) > 1 else "")
+
 
 def go(screen, nivel_idx=None, missao_idx=None):
     st.session_state.screen = screen
@@ -232,8 +246,13 @@ def render_progress_bar():
 
 def render_sidebar():
     with st.sidebar:
-        st.markdown("## Abstractio")
-        st.caption("Aprenda POO na prática!")
+        nome_exibido = st.session_state.nome or "Sr. Polvonilson"
+        st.markdown('<div class="sidebar-title-top">Abstractio</div>', unsafe_allow_html=True)
+        st.markdown('<div class="avatar-btn-wrap">', unsafe_allow_html=True)
+        if st.button(st.session_state.avatar, key="sidebar_avatar"):
+            go("perfil")
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="sidebar-nome">{nome_exibido}</div>', unsafe_allow_html=True)
         st.divider()
 
         col1, col2 = st.columns(2)
@@ -269,7 +288,7 @@ def emblema_dialog():
     st.markdown(
         f'<div style="text-align:center;font-size:4.5rem;margin:0.5rem 0">{emb["icon"]}</div>'
         f'<div style="text-align:center;font-size:1.1rem;font-weight:700;color:#c4b5fd;margin-bottom:0.4rem">'
-        f'{emb["nome"]}</div>'
+        f'{get_emblema_nome(emb)}</div>'
         f'<div style="text-align:center;font-size:0.9rem;color:#94a3b8">'
         f'Parabéns! Você conquistou este troféu ao concluir a missão.</div>',
         unsafe_allow_html=True,
@@ -556,6 +575,49 @@ def screen_missao():
 
 
 # ══════════════════════════════════════════════════════════════
+#  SCREEN: PERFIL
+# ══════════════════════════════════════════════════════════════
+
+AVATARES = ["🐙", "🐠", "🦈", "🐋", "🦑", "🐡", "🦀", "🐬"]
+
+def screen_perfil():
+    st.markdown("# Meu Perfil")
+    st.markdown("---")
+
+    nome = st.text_input(
+        "Nome",
+        value=st.session_state.nome,
+        placeholder="Como quer ser chamado(a)?",
+        key="perfil_nome_input",
+    )
+
+    st.markdown("**Gênero**")
+    st.caption("Define a forma dos seus títulos de conquista.")
+    gcols = st.columns(3)
+    for col, (label, valor) in zip(gcols, [("Feminino", "feminino"), ("Masculino", "masculino"), ("Neutro", "neutro")]):
+        with col:
+            ativo = st.session_state.genero == valor
+            if st.button(label, key=f"g_{valor}", type="primary" if ativo else "secondary", use_container_width=True):
+                st.session_state.genero = valor
+                st.rerun()
+
+    st.markdown("**Avatar**")
+    acols = st.columns(len(AVATARES))
+    for col, av in zip(acols, AVATARES):
+        with col:
+            ativo = st.session_state.avatar == av
+            if st.button(av, key=f"av_{av}", type="primary" if ativo else "secondary", use_container_width=True):
+                st.session_state.avatar = av
+                st.rerun()
+
+    st.markdown("")
+    if st.button("Salvar perfil", icon=":material/check:", type="primary"):
+        st.session_state.nome = st.session_state.perfil_nome_input
+        st.toast("Perfil salvo!", icon=":material/check:")
+        go("dashboard")
+
+
+# ══════════════════════════════════════════════════════════════
 #  SCREEN: MINHAS TRILHAS
 # ══════════════════════════════════════════════════════════════
 
@@ -639,7 +701,7 @@ def screen_conquistas():
             card = (
                 f'<div class="trophy-card {"earned" if mid in completed else "unearned"}">'
                 f'  <div class="trophy-icon">{emb["icon"]}</div>'
-                f'  <div class="trophy-nome">{emb["nome"]}</div>'
+                f'  <div class="trophy-nome">{get_emblema_nome(emb)}</div>'
                 f'</div>'
             )
             if mid in completed:
@@ -668,6 +730,8 @@ screen = st.session_state.screen
 
 if screen == "dashboard":
     screen_dashboard()
+elif screen == "perfil":
+    screen_perfil()
 elif screen == "trilhas":
     screen_trilhas()
 elif screen == "trilha":
