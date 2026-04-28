@@ -73,6 +73,7 @@ def _init():
         "nivel_nome_idx":      0,
         "completed":           set(),   # set of "nv-ms" strings
         "niveis_concluidos":   set(),   # set of nivel indices
+        "new_emblema":         None,    # id da missão recém-concluída (para o dialog)
         "first_visit":         True,
         # per-missao exercise state (keyed so navigating resets it)
         "ex_key":              "",      # current missao id
@@ -130,9 +131,8 @@ def complete_missao(nv, ms):
         st.session_state.ex_correct = True
         _award_points(15)
         st.toast("+15 pontos! Continue assim!", icon=":material/star:")
-        emb = EMBLEMAS.get(key)
-        if emb:
-            st.toast(f"{emb['icon']} Troféu desbloqueado: {emb['nome']}!", icon=":material/military_tech:")
+        if EMBLEMAS.get(key):
+            st.session_state.new_emblema = key
         nivel = CURRICULUM[nv]
         needed = {missao_key(nv, i) for i in range(len(nivel["missoes"]))}
         if needed.issubset(st.session_state.completed) and nv not in st.session_state.niveis_concluidos:
@@ -262,6 +262,29 @@ render_sidebar()
 # ══════════════════════════════════════════════════════════════
 #  DIALOG — skip confirmation
 # ══════════════════════════════════════════════════════════════
+
+@st.dialog("🏆 Troféu desbloqueado!")
+def emblema_dialog():
+    emb = EMBLEMAS[st.session_state.new_emblema]
+    st.markdown(
+        f'<div style="text-align:center;font-size:4.5rem;margin:0.5rem 0">{emb["icon"]}</div>'
+        f'<div style="text-align:center;font-size:1.1rem;font-weight:700;color:#c4b5fd;margin-bottom:0.4rem">'
+        f'{emb["nome"]}</div>'
+        f'<div style="text-align:center;font-size:0.9rem;color:#94a3b8">'
+        f'Parabéns! Você conquistou este troféu ao concluir a missão.</div>',
+        unsafe_allow_html=True,
+    )
+    st.write("")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Ver minhas conquistas", icon=":material/military_tech:", use_container_width=True):
+            st.session_state.new_emblema = None
+            go("conquistas")
+    with col2:
+        if st.button("Próxima Missão", icon=":material/arrow_forward:", type="primary", use_container_width=True):
+            st.session_state.new_emblema = None
+            navigate_next()
+
 
 @st.dialog("Missão não concluída")
 def skip_dialog():
@@ -524,7 +547,10 @@ def screen_missao():
             btn_type = "primary" if missao_concluida else "secondary"
             if st.button(next_label, icon=next_icon, type=btn_type, key="next_ms"):
                 if missao_concluida:
-                    navigate_next()
+                    if st.session_state.new_emblema:
+                        emblema_dialog()
+                    else:
+                        navigate_next()
                 else:
                     skip_dialog()
 
