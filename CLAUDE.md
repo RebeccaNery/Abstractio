@@ -2,6 +2,10 @@
 
 App educacional gamificado para ensinar POO em Python, construído com Streamlit.
 
+## Convenções de git
+
+- Mensagens de commit sempre em **Português do Brasil**
+
 ## Como rodar
 
 ```bash

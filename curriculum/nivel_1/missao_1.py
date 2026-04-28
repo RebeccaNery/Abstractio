@@ -1,6 +1,6 @@
 MISSAO = {
     "id": "0-0",
-    "title": "O que é POO?",
+    "title": "O que é 'Programação Orientada a Objetos'?",
     "icon": "🧩",
     "theory": """
 ## O que é Programação Orientada a Objetos?
