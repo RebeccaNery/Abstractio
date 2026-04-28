@@ -469,7 +469,7 @@ def screen_missao():
                 go("trilha")
     else:
         # ── Navigation buttons ────────────────────────────────
-        btn_cols = st.columns([1, 1, 3])
+        btn_cols = st.columns([1, 2])
         missao_concluida = st.session_state.ex_correct
 
         if is_last_in_nivel and not is_last_nivel:
@@ -480,7 +480,7 @@ def screen_missao():
             next_icon = ":material/flag:"
         else:
             next_ms = nivel["missoes"][ms + 1] if ms + 1 < len(nivel["missoes"]) else None
-            next_label = f"Próxima: {next_ms['title']}" if next_ms else "Próxima missão"
+            next_label = f"Próxima Missão: {next_ms['title']}" if next_ms else "Próxima Missão"
             next_icon = ":material/arrow_forward:"
 
         with btn_cols[0]:
@@ -494,8 +494,9 @@ def screen_missao():
                     go("missao", nv - 1, len(prev_nivel["missoes"]) - 1)
 
         with btn_cols[1]:
+            st.markdown('<span class="next-btn-marker"></span>', unsafe_allow_html=True)
             btn_type = "primary" if missao_concluida else "secondary"
-            if st.button(next_label, icon=next_icon, type=btn_type, key="next_ms", use_container_width=True):
+            if st.button(next_label, icon=next_icon, type=btn_type, key="next_ms"):
                 if missao_concluida:
                     navigate_next()
                 else:

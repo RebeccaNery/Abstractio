@@ -112,6 +112,12 @@
     border-left: 4px solid #f59e0b;
 }
 
+/* ── Next button (icon on the right) ────────────── */
+.next-btn-marker { display: none; }
+div[data-testid="stVerticalBlock"]:has(.next-btn-marker) [data-testid="stButton"] button {
+    flex-direction: row-reverse;
+}
+
 /* ── Dividers ────────────────────────────────────── */
 hr {
     border-color: #2d2d44;
