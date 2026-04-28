@@ -392,8 +392,11 @@ def screen_missao():
     # ── Theory ──────────────────────────────────────────────
     st.markdown(missao["theory"])
 
-    # ── Interactive placeholder ──────────────────────────────
-    st.info("**Interação Visual / Jogo** — `# TODO`: mini-jogo interativo para esta missão será implementado aqui.")
+    # ── Interactive ──────────────────────────────────────────
+    if "render_interativo" in missao and callable(missao["render_interativo"]):
+        missao["render_interativo"]()
+    else:
+        st.info("Componente interativo em breve.")
 
     st.markdown("---")
 
