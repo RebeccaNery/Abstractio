@@ -1,9 +1,8 @@
 MISSAO = {
     "id": "0-0",
-    "title": "O que é 'Programação Orientada a Objetos'?",
+    "title": "O que é a Programação Orientada a Objetos?",
     "icon": "🧩",
     "theory": """
-## O que é Programação Orientada a Objetos?
 
 A **Programação Orientada a Objetos (POO)** é um paradigma que organiza o software em torno de **objetos** — entidades que combinam dados (atributos) e comportamentos (métodos).
 
