@@ -5,6 +5,10 @@ App educacional gamificado para ensinar POO em Python, construído com Streamlit
 ## Convenções de git
 
 - Mensagens de commit sempre em **Português do Brasil**
+- Usar **Conventional Commits** em pt-BR: `tipo: descrição curta` (ex: `feat: adicionar missão de herança`)
+- Tipos aceitos: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`
+- Quando houver múltiplas mudanças relevantes, incluir corpo com bullet points em pt-BR
+- **Ao finalizar qualquer implementação**, perguntar à Rebecca se deseja que o commit seja feito antes de encerrar
 
 ## Como rodar
 
@@ -12,16 +16,23 @@ App educacional gamificado para ensinar POO em Python, construído com Streamlit
 python -m streamlit run app.py
 ```
 
+> Sempre que a Rebecca disser "rodar" (ou "roda", "rode", "vamos rodar"), execute automaticamente o comando acima via Bash.
+
 ## Estrutura do projeto
 
 ```
 app.py                  # único arquivo da UI (Streamlit)
+styles.css              # todo o CSS global da aplicação
 curriculum/
   __init__.py           # exporta CURRICULUM, get_flat_missoes, get_total_missoes
-  modulo_1.py           # NIVEL_1 — Fundamentos (6 missões)
-  modulo_2.py           # NIVEL_2 — As leis do mundo / Pilares (6 missões)
-  modulo_3.py           # NIVEL_3 — A sociedade dos objetos (11 missões)
-  modulo_4.py           # NIVEL_4 — O arquiteto mestre (7 missões)
+  nivel_1/
+    __init__.py         # define NIVEL (dict com metadata + lista de missões)
+    missao_1.py         # MISSAO dict + render_interativo() opcional
+    missao_2.py
+    ...                 # (6 missões no total)
+  nivel_2/              # (6 missões)
+  nivel_3/              # (11 missões)
+  nivel_4/              # (7 missões)
 ```
 
 ## Nomenclatura (importante)
@@ -77,20 +88,36 @@ NIVEL_N = {
 - `"trilha"` — lista de todos os níveis e missões
 - `"missao"` — conteúdo de uma missão (teoria + exercício)
 
-## Reestruturação planejada (próximo passo)
+## Estrutura de um arquivo de missão (`missao_N.py`)
 
-Migrar de 1 arquivo por nível para **1 arquivo por missão** em subdiretórios:
+```python
+# render_interativo é opcional — só existe em missões com mini-jogo
+def render_interativo():
+    import streamlit.components.v1 as components
+    components.html(_HTML, height=480, scrolling=False)
 
+_HTML = """..."""  # HTML/CSS/JS do mini-jogo (string longa)
+
+MISSAO = {
+    "id": "nv-ms",              # ex: "0-0" (nivel-missao, base 0)
+    "title": str,
+    "icon": str,                # emoji
+    "theory": str,              # Markdown exibido antes do exercício
+    "exercise": {
+        "question": str,
+        "options": [str, ...],
+        "correct": int,         # índice da opção correta
+        "explanation": str,
+    },
+    "render_interativo": render_interativo,  # omitir se não houver mini-jogo
+}
 ```
-curriculum/
-  nivel_1/
-    __init__.py     # metadata do nível
-    missao_1.py     # theory + exercise + render_interativo()
-    missao_2.py
-    ...
-```
 
-Motivação: cada missão receberá componentes interativos com imports próprios (bibliotecas externas, mini-jogos). Manter tudo num arquivo por nível ficaria pesado.
+## Fluxo para criar uma missão nova
+
+1. Criar `curriculum/nivel_N/missao_M.py` seguindo a estrutura acima.
+2. Importar no `curriculum/nivel_N/__init__.py` e adicionar à lista `"missoes"`.
+3. Nenhuma outra alteração é necessária — `curriculum/__init__.py` e `app.py` consomem tudo dinamicamente.
 
 ## Pontuação e ranks
 
