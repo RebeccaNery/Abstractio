@@ -1,7 +1,7 @@
-from .modulo_1 import NIVEL_1
-from .modulo_2 import NIVEL_2
-from .modulo_3 import NIVEL_3
-from .modulo_4 import NIVEL_4
+from .nivel_1 import NIVEL as NIVEL_1
+from .nivel_2 import NIVEL as NIVEL_2
+from .nivel_3 import NIVEL as NIVEL_3
+from .nivel_4 import NIVEL as NIVEL_4
 
 CURRICULUM = [NIVEL_1, NIVEL_2, NIVEL_3, NIVEL_4]
 
