@@ -12,7 +12,7 @@ from .missao_11 import MISSAO as _m11
 
 NIVEL = {
     "id": 2,
-    "title": "Nível 3 — A sociedade dos objetos",
+    "title": "Nível 3 — Relações: A sociedade dos objetos",
     "short": "Relações",
     "missoes": [_m1, _m2, _m3, _m4, _m5, _m6, _m7, _m8, _m9, _m10, _m11],
 }

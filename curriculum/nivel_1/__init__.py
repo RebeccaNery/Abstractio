@@ -7,7 +7,7 @@ from .missao_6 import MISSAO as _m6
 
 NIVEL = {
     "id": 0,
-    "title": "Nível 1 — Fundamentos",
+    "title": "Nível 1 — Fundamentos: O despertar do Polvinho",
     "short": "Fundamentos",
     "missoes": [_m1, _m2, _m3, _m4, _m5, _m6],
 }

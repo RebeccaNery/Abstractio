@@ -8,7 +8,7 @@ from .missao_7 import MISSAO as _m7
 
 NIVEL = {
     "id": 3,
-    "title": "Nível 4 — O arquiteto mestre",
+    "title": "Nível 4 — Arquitetura: a engenharia submarina",
     "short": "Arquitetura",
     "missoes": [_m1, _m2, _m3, _m4, _m5, _m6, _m7],
 }

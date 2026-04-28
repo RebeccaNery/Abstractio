@@ -7,7 +7,7 @@ from .missao_6 import MISSAO as _m6
 
 NIVEL = {
     "id": 1,
-    "title": "Nível 2 — As leis do mundo",
+    "title": "Nível 2 — Pilares: As leis do oceano",
     "short": "Pilares",
     "missoes": [_m1, _m2, _m3, _m4, _m5, _m6],
 }
