@@ -207,7 +207,7 @@ def render_progress_bar():
 def render_sidebar():
     with st.sidebar:
         st.markdown("## Abstractio")
-        st.caption("Aprenda POO na prática")
+        st.caption("Aprenda POO na prática!")
         st.divider()
 
         col1, col2 = st.columns(2)
@@ -388,7 +388,6 @@ def screen_missao():
             go("trilha")
 
     st.markdown(f"# {missao['title']}")
-    st.markdown("---")
 
     # ── Theory ──────────────────────────────────────────────
     st.markdown(missao["theory"])
@@ -400,10 +399,13 @@ def screen_missao():
 
     # ── Exercise ─────────────────────────────────────────────
     ex = missao["exercise"]
-    st.markdown('<div class="exercise-box">', unsafe_allow_html=True)
-    st.markdown('<div class="exercise-title">Exercício Prático</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="exercise-q">{ex["question"]}</div>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="exercise-header">'
+        f'<span class="exercise-tag">Exercício Prático</span>'
+        f'</div>'
+        f'<div class="exercise-question">{ex["question"]}</div>',
+        unsafe_allow_html=True,
+    )
 
     selected = st.radio(
         "Escolha sua resposta:",

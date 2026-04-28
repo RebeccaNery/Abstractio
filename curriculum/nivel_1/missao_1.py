@@ -4,23 +4,11 @@ MISSAO = {
     "icon": "🧩",
     "theory": """
 
+    
 A **Programação Orientada a Objetos (POO)** é um paradigma que organiza o software em torno de **objetos** — entidades que combinam dados (atributos) e comportamentos (métodos).
 
 Em vez de uma sequência linear de instruções, você pensa em um conjunto de objetos que colaboram entre si.
 
-### Exemplo inicial
-
-```python
-class Cachorro:
-    def __init__(self, nome):
-        self.nome = nome
-
-    def latir(self):
-        return f"{self.nome} diz: Au au!"
-
-rex = Cachorro("Rex")
-print(rex.latir())  # Rex diz: Au au!
-```
 """,
     "exercise": {
         "question": "Qual das alternativas melhor define a Programação Orientada a Objetos?",

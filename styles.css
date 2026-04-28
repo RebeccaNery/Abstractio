@@ -312,22 +312,26 @@ hr {
               padding: 4px 14px; border-radius: 20px; border: 1px solid #4c3a8a; }
 
 /* ── Exercise area ───────────────────────────────── */
-.exercise-box {
-    background: #12122a;
-    border: 1px solid #3730a3;
-    border-radius: 12px;
-    padding: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-.exercise-title {
-    font-size: 0.75rem;
+.exercise-header { margin: 1.5rem 0 0.6rem 0; }
+.exercise-tag {
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #818cf8;
-    margin-bottom: 0.8rem;
+    background: #1e1b4b;
+    border: 1px solid #3730a3;
+    padding: 3px 12px;
+    border-radius: 20px;
 }
-.exercise-q { font-size: 1rem; color: #e2e8f0; margin-bottom: 1.2rem; }
+.exercise-question {
+    font-size: 1rem;
+    color: #e2e8f0;
+    line-height: 1.6;
+    border-left: 3px solid #7c3aed;
+    padding-left: 1rem;
+    margin: 0.8rem 0 1.2rem 0;
+}
 
 /* ── Badge pills ─────────────────────────────────── */
 .badge {
