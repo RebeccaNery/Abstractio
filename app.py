@@ -364,21 +364,71 @@ def skip_dialog():
 def screen_dashboard():
     render_progress_bar()
 
-    # Hero
+    # Carrossel hero (apenas visual — sem botões ocultos)
     st.markdown("""
-    <div class="hero">
-      <div class="hero-title">Bem-vindo ao Abstractio</div>
-      <div class="hero-sub">
-        Aprenda os conceitos abstratos da Orientação a Objetos na prática,
-        com lições interativas e jogos em cada nível.
+    <div class="hero-carousel">
+      <div class="hero hero-slide active">
+        <div class="hero-title">Bem-vindo ao Abstractio</div>
+        <div class="hero-sub">Aprenda os conceitos de Orientação a Objetos na prática,
+        com lições interativas e jogos em cada nível.</div>
+      </div>
+      <div class="hero hero-slide">
+        <div class="hero-title">Conheça o Abstractio</div>
+        <div class="hero-sub">Entenda como funcionam os Níveis, Missões, Exercícios
+        e Emblemas da plataforma.</div>
+      </div>
+      <div class="hero-dots">
+        <span class="hero-dot active" data-idx="0"></span>
+        <span class="hero-dot" data-idx="1"></span>
       </div>
     </div>
     """, unsafe_allow_html=True)
 
-    col_btn, _, _ = st.columns([1, 2, 1])
-    with col_btn:
+    # JS: apenas animação dos slides (sem truques de botões ocultos)
+    components.html("""
+    <script>
+    (function() {
+        var doc = window.parent.document;
+        var current = 0;
+        var timer;
+
+        function goTo(n) {
+            var slides = doc.querySelectorAll('.hero-slide');
+            var dots   = doc.querySelectorAll('.hero-dot');
+            slides.forEach(function(s, i) { s.classList.toggle('active', i === n); });
+            dots.forEach(function(d, i)   { d.classList.toggle('active', i === n); });
+            current = n;
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(function() { goTo((current + 1) % 2); }, 5000);
+        }
+
+        function setup() {
+            var dots = doc.querySelectorAll('.hero-dot');
+            if (!dots.length) { setTimeout(setup, 150); return; }
+            dots.forEach(function(dot) {
+                dot.addEventListener('click', function() {
+                    goTo(parseInt(dot.dataset.idx));
+                    startTimer();
+                });
+            });
+            startTimer();
+        }
+        setup();
+    })();
+    </script>
+    """, height=0)
+
+    # CTAs reais abaixo do carrossel
+    col_a, col_b, _ = st.columns([1, 1, 2])
+    with col_a:
         if st.button("Comece já", icon=":material/rocket_launch:", type="primary", use_container_width=True):
             go("trilhas")
+    with col_b:
+        if st.button("Como funciona", icon=":material/info:", use_container_width=True):
+            go("como_funciona")
 
     st.markdown("---")
     st.markdown("### Destaques")
@@ -482,12 +532,12 @@ def screen_missao():
     render_progress_bar()
 
     # Breadcrumb
-    col_bc, col_nav = st.columns([4, 1])
-    with col_bc:
-        st.caption(f"{nivel['title']} › {missao['title']}")
+    col_nav, col_bc = st.columns([1, 4])
     with col_nav:
         if st.button("Trilha", icon=":material/arrow_back:", key="back_to_trilha"):
             go("trilha")
+    with col_bc:
+        st.caption(f"{nivel['title']} › {missao['title']}")
 
     st.markdown(f"# {missao['title']}")
 
@@ -808,6 +858,47 @@ def screen_conquistas():
 
 
 # ══════════════════════════════════════════════════════════════
+#  SCREEN: COMO FUNCIONA
+# ══════════════════════════════════════════════════════════════
+
+def screen_como_funciona():
+    col_back, _ = st.columns([1, 5])
+    with col_back:
+        if st.button("Voltar", icon=":material/arrow_back:", key="como_back"):
+            go("dashboard")
+
+    st.markdown("# Como funciona o Abstractio")
+    st.caption("Aprenda no seu ritmo, com missões práticas e recompensas a cada conquista.")
+    st.markdown("---")
+
+    passos = [
+        ("🎯", "Níveis",      "O currículo é dividido em 4 Níveis, cada um cobrindo um tema central de POO. Avance do mais simples ao mais avançado."),
+        ("📚", "Missões",     "Cada Nível contém de 6 a 11 Missões com explicação teórica e um componente interativo para praticar o conceito."),
+        ("✏️", "Exercícios",  "Ao final de cada missão, responda um exercício de múltipla escolha para confirmar o aprendizado e ganhar +15 pontos."),
+        ("🏆", "Emblemas",    "Cada missão concluída desbloqueia um Emblema exclusivo. Acesse Conquistas para ver sua estante de troféus."),
+    ]
+
+    for i, (icon, title, desc) in enumerate(passos):
+        st.markdown(
+            f'<div class="como-card">'
+            f'  <div class="como-step">{i + 1}</div>'
+            f'  <div class="como-icon">{icon}</div>'
+            f'  <div class="como-body">'
+            f'    <div class="como-title">{title}</div>'
+            f'    <div class="como-desc">{desc}</div>'
+            f'  </div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("")
+    col_btn, _ = st.columns([1, 3])
+    with col_btn:
+        if st.button("Começar agora", icon=":material/rocket_launch:", type="primary", use_container_width=True):
+            go("trilhas")
+
+
+# ══════════════════════════════════════════════════════════════
 #  ROUTER
 # ══════════════════════════════════════════════════════════════
 
@@ -827,3 +918,5 @@ elif screen == "missao":
     screen_missao()
 elif screen == "conquistas":
     screen_conquistas()
+elif screen == "como_funciona":
+    screen_como_funciona()
