@@ -229,6 +229,9 @@ hr {
     position: relative;
     overflow: hidden;
 }
+.hero--menta {
+    background: linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%);
+}
 .hero::before {
     content: "";
     position: absolute;
@@ -253,7 +256,29 @@ hr {
 }
 
 /* ── Hero carousel ───────────────────────────────── */
-.hero-carousel { margin-bottom: 2rem; }
+.hero-carousel { margin-bottom: 2rem; position: relative; }
+.hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+}
+.hero-arrow:hover { background: rgba(255, 255, 255, 0.3); }
+.hero-arrow--prev { left: 0.75rem; }
+.hero-arrow--next { right: 0.75rem; }
 .hero-slide { display: none; margin-bottom: 0; }
 .hero-slide.active {
     display: block;

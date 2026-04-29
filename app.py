@@ -375,7 +375,7 @@ def screen_dashboard():
           <button class="hero-cta hero-cta--primary" data-action="trilhas">Comece já</button>
         </div>
       </div>
-      <div class="hero hero-slide">
+      <div class="hero hero-slide hero--menta">
         <div class="hero-title">Conheça o Abstractio</div>
         <div class="hero-sub">Entenda como funcionam os Níveis, Missões, Exercícios
         e Emblemas da plataforma.</div>
@@ -383,6 +383,8 @@ def screen_dashboard():
           <button class="hero-cta hero-cta--secondary" data-action="como">Como funciona</button>
         </div>
       </div>
+      <button class="hero-arrow hero-arrow--prev">&#8249;</button>
+      <button class="hero-arrow hero-arrow--next">&#8250;</button>
       <div class="hero-dots">
         <span class="hero-dot active" data-idx="0"></span>
         <span class="hero-dot" data-idx="1"></span>
@@ -444,6 +446,16 @@ def screen_dashboard():
             });
             doc.querySelectorAll('.hero-cta[data-action="como"]').forEach(function(btn) {
                 btn.addEventListener('click', function() { stComo.click(); });
+            });
+
+            // Setas
+            var prevBtn = doc.querySelector('.hero-arrow--prev');
+            var nextBtn = doc.querySelector('.hero-arrow--next');
+            if (prevBtn) prevBtn.addEventListener('click', function() {
+                goTo((current - 1 + 2) % 2); startTimer();
+            });
+            if (nextBtn) nextBtn.addEventListener('click', function() {
+                goTo((current + 1) % 2); startTimer();
             });
 
             // Dots
