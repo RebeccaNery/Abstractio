@@ -1,4 +1,7 @@
+import base64
+import os
 import streamlit as st
+import streamlit.components.v1 as components
 
 from curriculum import CURRICULUM, get_flat_missoes, get_total_missoes
 
@@ -77,7 +80,7 @@ def _init():
         "new_emblema":         None,    # id da missão recém-concluída (para o dialog)
         "nome":                "",
         "genero":              "feminino",
-        "avatar":              "🐙",
+        "avatar":              "octopus.png",
         "first_visit":         True,
         # per-missao exercise state (keyed so navigating resets it)
         "ex_key":              "",      # current missao id
@@ -98,6 +101,20 @@ if st.session_state.first_visit:
 # ══════════════════════════════════════════════════════════════
 #  HELPERS
 # ══════════════════════════════════════════════════════════════
+
+@st.cache_data
+def _avatar_b64(filename):
+    with open(f"assets/{filename}", "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+
+def _avatar_html():
+    av = st.session_state.avatar
+    if av.endswith(".png"):
+        b64 = _avatar_b64(av)
+        return f'<img src="data:image/png;base64,{b64}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+    return av
+
 
 def get_emblema_nome(emb):
     genero = st.session_state.genero
@@ -248,10 +265,32 @@ def render_sidebar():
     with st.sidebar:
         nome_exibido = st.session_state.nome or "Sr. Polvonilson"
         st.markdown('<div class="sidebar-title-top">Abstractio</div>', unsafe_allow_html=True)
-        st.markdown('<div class="avatar-btn-wrap">', unsafe_allow_html=True)
-        if st.button(st.session_state.avatar, key="sidebar_avatar"):
+        st.markdown(
+            f'<div class="avatar-circle" id="st-avatar-circle">{_avatar_html()}</div>',
+            unsafe_allow_html=True,
+        )
+        if st.button("go_perfil", key="sidebar_avatar"):
             go("perfil")
-        st.markdown('</div>', unsafe_allow_html=True)
+        components.html("""
+        <script>
+        (function poll() {
+            var doc = window.parent.document;
+            var circle = doc.getElementById('st-avatar-circle');
+            var target = null;
+            var btns = doc.querySelectorAll('button');
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i].innerText.trim() === 'go_perfil') { target = btns[i]; break; }
+            }
+            if (!circle || !target) { setTimeout(poll, 150); return; }
+            var wrapper = target.closest('div[data-testid]') || target.parentElement;
+            if (wrapper) wrapper.style.display = 'none';
+            if (circle.dataset.wired) return;
+            circle.dataset.wired = '1';
+            circle.style.cursor = 'pointer';
+            circle.addEventListener('click', function() { target.click(); });
+        })();
+        </script>
+        """, height=0)
         st.markdown(f'<div class="sidebar-nome">{nome_exibido}</div>', unsafe_allow_html=True)
         st.divider()
 
@@ -333,7 +372,7 @@ def screen_dashboard():
     <div class="hero">
       <div class="hero-title">Bem-vindo ao Abstractio</div>
       <div class="hero-sub">
-        Aprenda os conceitos abstratos da Ciência da Computação na prática,
+        Aprenda os conceitos abstratos da Orientação a Objetos na prática,
         com lições interativas e jogos em cada nível.
       </div>
     </div>
@@ -578,7 +617,7 @@ def screen_missao():
 #  SCREEN: PERFIL
 # ══════════════════════════════════════════════════════════════
 
-AVATARES = ["🐙", "🐠", "🦈", "🐋", "🦑", "🐡", "🦀", "🐬"]
+AVATARES = sorted(f for f in os.listdir("assets") if f.endswith(".png"))
 
 def screen_perfil():
     st.markdown("# Meu Perfil")
@@ -606,7 +645,18 @@ def screen_perfil():
     for col, av in zip(acols, AVATARES):
         with col:
             ativo = st.session_state.avatar == av
-            if st.button(av, key=f"av_{av}", type="primary" if ativo else "secondary", use_container_width=True):
+            b64 = _avatar_b64(av)
+            borda = "#7c3aed" if ativo else "#2d2d44"
+            st.markdown(
+                f'<div style="width:72px;height:72px;border-radius:50%;border:3px solid {borda};'
+                f'margin:0 auto 6px auto;overflow:hidden;cursor:pointer;">'
+                f'<img src="data:image/png;base64,{b64}" style="width:100%;height:100%;object-fit:cover;">'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            if st.button("✓" if ativo else " ", key=f"av_{av}",
+                         type="primary" if ativo else "secondary",
+                         use_container_width=True):
                 st.session_state.avatar = av
                 st.rerun()
 
