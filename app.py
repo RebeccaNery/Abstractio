@@ -294,11 +294,8 @@ def render_sidebar():
         st.markdown(f'<div class="sidebar-nome">{nome_exibido}</div>', unsafe_allow_html=True)
         st.divider()
 
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Pontos", st.session_state.pontuacao)
-        with col2:
-            st.metric("Nível", st.session_state.nivel_nome)
+        st.metric("Pontos", st.session_state.pontuacao)
+        st.metric("Nível", st.session_state.nivel_nome)
 
         st.divider()
 

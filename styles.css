@@ -382,7 +382,7 @@ hr {
     justify-content: center;
     font-size: 3.5rem;
     line-height: 1;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 4px auto;
     transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .avatar-circle:hover {
@@ -392,17 +392,20 @@ hr {
     box-shadow: 0 0 24px rgba(124,58,237,0.5);
 }
 .sidebar-title-top {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #e2e8f0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #c4b5fd;
     text-align: center;
+    letter-spacing: 0.04em;
+    margin-top: -1rem;
     margin-bottom: 10px;
 }
 .sidebar-nome {
-    font-size: 0.85rem;
-    color: #94a3b8;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e2e8f0;
     text-align: center;
-    margin-top: 6px;
+    margin-top: -0.5rem;
 }
 
 /* ── Trail cards (minhas trilhas) ───────────────── */
