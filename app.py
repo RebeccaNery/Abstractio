@@ -617,7 +617,45 @@ def screen_missao():
 AVATARES = sorted(f for f in os.listdir("assets/avatars") if f.endswith(".png"))
 
 def screen_perfil():
-    st.markdown("# Meu Perfil")
+    col_back, _ = st.columns([1, 5])
+    with col_back:
+        if st.button("Voltar", icon=":material/arrow_back:", key="perfil_back"):
+            go("dashboard")
+
+    nome_exibido = st.session_state.nome or "Sr. Polvonilson"
+    missoes_feitas = len(st.session_state.completed)
+
+    st.markdown(
+        f'<div style="display:flex;flex-direction:column;align-items:center;gap:0.6rem;margin:1.5rem 0 2rem 0;">'
+        f'  <div class="avatar-circle" style="width:130px;height:130px;font-size:3rem;pointer-events:none;">'
+        f'    {_avatar_html()}'
+        f'  </div>'
+        f'  <div style="font-size:1.6rem;font-weight:700;color:#e2e8f0;">{nome_exibido}</div>'
+        f'  <div style="font-size:0.9rem;color:#a78bfa;font-weight:600;">{st.session_state.nivel_nome}</div>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    c1, c2 = st.columns(2)
+    with c1:
+        st.metric("Pontuação", st.session_state.pontuacao)
+    with c2:
+        st.metric("Missões concluídas", missoes_feitas)
+
+    st.markdown("")
+    col_btn, _ = st.columns([1, 2])
+    with col_btn:
+        if st.button("Editar perfil", icon=":material/edit:", type="primary", use_container_width=True):
+            go("perfil_edit")
+
+
+def screen_perfil_edit():
+    col_back, _ = st.columns([1, 5])
+    with col_back:
+        if st.button("Voltar", icon=":material/arrow_back:", key="perfil_edit_back"):
+            go("perfil")
+
+    st.markdown("# Editar Perfil")
     st.markdown("---")
 
     nome = st.text_input(
@@ -661,7 +699,7 @@ def screen_perfil():
     if st.button("Salvar perfil", icon=":material/check:", type="primary"):
         st.session_state.nome = st.session_state.perfil_nome_input
         st.toast("Perfil salvo!", icon=":material/check:")
-        go("dashboard")
+        go("perfil")
 
 
 # ══════════════════════════════════════════════════════════════
@@ -680,7 +718,7 @@ def screen_trilhas():
     st.markdown(
         f'<div class="trail-card">'
         f'  <div class="trail-header">'
-        f'    <div class="trail-icon">🐙</div>'
+        f'    <div class="trail-icon"><img src="data:image/png;base64,{_avatar_b64("octopus.png")}" style="width:2.2rem;height:2.2rem;object-fit:cover;border-radius:50%;"></div>'
         f'    <div class="trail-info">'
         f'      <div class="trail-title">Orientação a Objetos</div>'
         f'      <div class="trail-sub">Python · {total} missões · 4 níveis</div>'
@@ -779,6 +817,8 @@ if screen == "dashboard":
     screen_dashboard()
 elif screen == "perfil":
     screen_perfil()
+elif screen == "perfil_edit":
+    screen_perfil_edit()
 elif screen == "trilhas":
     screen_trilhas()
 elif screen == "trilha":
