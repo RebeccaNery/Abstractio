@@ -104,7 +104,7 @@ if st.session_state.first_visit:
 
 @st.cache_data
 def _avatar_b64(filename):
-    with open(f"assets/{filename}", "rb") as f:
+    with open(f"assets/avatars/{filename}", "rb") as f:
         return base64.b64encode(f.read()).decode()
 
 
@@ -617,7 +617,7 @@ def screen_missao():
 #  SCREEN: PERFIL
 # ══════════════════════════════════════════════════════════════
 
-AVATARES = sorted(f for f in os.listdir("assets") if f.endswith(".png"))
+AVATARES = sorted(f for f in os.listdir("assets/avatars") if f.endswith(".png"))
 
 def screen_perfil():
     st.markdown("# Meu Perfil")
