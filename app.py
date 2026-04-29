@@ -497,7 +497,7 @@ def screen_trilha():
                 st.markdown(
                     f'<div class="section-row {"done" if done else ""}">'
                     f'  <span class="section-status">{status_icon}</span>'
-                    f'  <span class="section-name">{missao["title"]}</span>'
+                    f'  <span class="section-name">Missão {ms_idx + 1} — {missao["title"]}</span>'
                     f'  <span class="section-pts">+15 pts</span>'
                     f'</div>',
                     unsafe_allow_html=True,
