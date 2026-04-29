@@ -364,18 +364,24 @@ def skip_dialog():
 def screen_dashboard():
     render_progress_bar()
 
-    # Carrossel hero (apenas visual — sem botões ocultos)
+    # Carrossel hero com CTAs integrados dentro do card
     st.markdown("""
     <div class="hero-carousel">
       <div class="hero hero-slide active">
         <div class="hero-title">Bem-vindo ao Abstractio</div>
         <div class="hero-sub">Aprenda os conceitos de Orientação a Objetos na prática,
         com lições interativas e jogos em cada nível.</div>
+        <div class="hero-ctas">
+          <button class="hero-cta hero-cta--primary" data-action="trilhas">Comece já</button>
+        </div>
       </div>
       <div class="hero hero-slide">
         <div class="hero-title">Conheça o Abstractio</div>
         <div class="hero-sub">Entenda como funcionam os Níveis, Missões, Exercícios
         e Emblemas da plataforma.</div>
+        <div class="hero-ctas">
+          <button class="hero-cta hero-cta--secondary" data-action="como">Como funciona</button>
+        </div>
       </div>
       <div class="hero-dots">
         <span class="hero-dot active" data-idx="0"></span>
@@ -384,7 +390,13 @@ def screen_dashboard():
     </div>
     """, unsafe_allow_html=True)
 
-    # JS: apenas animação dos slides (sem truques de botões ocultos)
+    # Botões Streamlit ocultos — acionados via JS pelos CTAs do hero
+    if st.button("hero-nav-trilhas", key="hero_cta_trilhas"):
+        go("trilhas")
+    if st.button("hero-nav-como", key="hero_cta_como"):
+        go("como_funciona")
+
+    # JS: carrossel + wiring CTAs + esconder botões Streamlit
     components.html("""
     <script>
     (function() {
@@ -405,9 +417,36 @@ def screen_dashboard():
             timer = setInterval(function() { goTo((current + 1) % 2); }, 5000);
         }
 
+        function findStBtn(label) {
+            var btns = doc.querySelectorAll('[data-testid="stButton"] button');
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i].textContent.trim() === label) return btns[i];
+            }
+            return null;
+        }
+
         function setup() {
-            var dots = doc.querySelectorAll('.hero-dot');
-            if (!dots.length) { setTimeout(setup, 150); return; }
+            var dots   = doc.querySelectorAll('.hero-dot');
+            var ctaEls = doc.querySelectorAll('.hero-cta');
+            if (!dots.length || !ctaEls.length) { setTimeout(setup, 150); return; }
+
+            var stTrilhas = findStBtn('hero-nav-trilhas');
+            var stComo    = findStBtn('hero-nav-como');
+            if (!stTrilhas || !stComo) { setTimeout(setup, 150); return; }
+
+            // Esconder containers Streamlit dos botões ocultos
+            stTrilhas.closest('[data-testid="stButton"]').style.display = 'none';
+            stComo.closest('[data-testid="stButton"]').style.display = 'none';
+
+            // Wiring: botões HTML → botões Streamlit
+            doc.querySelectorAll('.hero-cta[data-action="trilhas"]').forEach(function(btn) {
+                btn.addEventListener('click', function() { stTrilhas.click(); });
+            });
+            doc.querySelectorAll('.hero-cta[data-action="como"]').forEach(function(btn) {
+                btn.addEventListener('click', function() { stComo.click(); });
+            });
+
+            // Dots
             dots.forEach(function(dot) {
                 dot.addEventListener('click', function() {
                     goTo(parseInt(dot.dataset.idx));
@@ -420,15 +459,6 @@ def screen_dashboard():
     })();
     </script>
     """, height=0)
-
-    # CTAs reais abaixo do carrossel
-    col_a, col_b, _ = st.columns([1, 1, 2])
-    with col_a:
-        if st.button("Comece já", icon=":material/rocket_launch:", type="primary", use_container_width=True):
-            go("trilhas")
-    with col_b:
-        if st.button("Como funciona", icon=":material/info:", use_container_width=True):
-            go("como_funciona")
 
     st.markdown("---")
 

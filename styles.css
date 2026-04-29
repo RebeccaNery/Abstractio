@@ -249,7 +249,7 @@ hr {
     color: #ddd6fe;
     max-width: 520px;
     line-height: 1.6;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 /* ── Hero carousel ───────────────────────────────── */
@@ -281,20 +281,36 @@ hr {
     background: #a78bfa;
     transform: scale(1.4);
 }
+.hero-ctas {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
 .hero-cta {
-    background: #ffffff;
-    color: #7c3aed;
-    border: none;
     border-radius: 8px;
     padding: 0.55rem 1.4rem;
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.2s;
+    border: 2px solid transparent;
+}
+.hero-cta--primary {
+    background: #ffffff;
+    color: #7c3aed;
+}
+.hero-cta--secondary {
+    background: transparent;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
 }
 .hero-cta:hover {
     opacity: 0.9;
     transform: translateY(-2px);
+}
+.hero-cta--secondary:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* ── Como funciona ───────────────────────────────── */
