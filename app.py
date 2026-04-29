@@ -303,7 +303,7 @@ def render_sidebar():
                      type="primary" if st.session_state.screen == "dashboard" else "secondary"):
             go("dashboard")
 
-        if st.button("Minhas Trilhas", icon=":material/map:", use_container_width=True,
+        if st.button("Minha Trilha", icon=":material/map:", use_container_width=True,
                      type="primary" if st.session_state.screen == "trilhas" else "secondary"):
             go("trilhas")
 
@@ -431,34 +431,6 @@ def screen_dashboard():
             go("como_funciona")
 
     st.markdown("---")
-    st.markdown("### Destaques")
-
-    c1, c2, c3 = st.columns(3)
-    cards = [
-        ("adjust", "Orientação a Objetos",
-         "Classes, herança e polimorfismo para criar código como um profissional.", False),
-        ("database", "Estruturas de Dados",
-         "Do array ao grafo, domine como organizar dados de forma eficiente.", True),
-        ("push_pin", "Ponteiros",
-         "Domine boas ordenações e eficiência computacional com exemplos reais.", True),
-    ]
-    for col, (icon, title, desc, muted) in zip([c1, c2, c3], cards):
-        with col:
-            css_class = "feat-card feat-card--muted" if muted else "feat-card"
-            st.markdown(
-                f'<div class="{css_class}">'
-                f'  <div class="feat-icon"><span class="material-symbols-rounded">{icon}</span></div>'
-                f'  <div class="feat-title">{title}</div>'
-                f'  <div class="feat-desc">{desc}</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
-            if not muted:
-                st.write("")
-                if st.button("Explorar", icon=":material/arrow_forward:", key="hero_explore", type="primary"):
-                    go("trilhas")
-            else:
-                st.markdown('<p style="color:#555570;font-size:0.75rem;margin-top:0.5rem;">em breve</p>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════
@@ -757,7 +729,7 @@ def screen_perfil_edit():
 # ══════════════════════════════════════════════════════════════
 
 def screen_trilhas():
-    st.markdown("# Minhas Trilhas")
+    st.markdown("# Minha Trilha")
     st.caption("Acompanhe seu progresso em cada trilha de aprendizado.")
     st.markdown("---")
 
@@ -787,28 +759,6 @@ def screen_trilhas():
     if st.button("Acessar trilha", icon=":material/arrow_forward:", type="primary", key="acessar_poo"):
         go("trilha")
 
-    st.markdown("### Em breve")
-    cols = st.columns(2)
-    futuras = [
-        ("📊", "Estruturas de Dados", "Do array ao grafo, domine como organizar dados de forma eficiente."),
-        ("📌", "Ponteiros",           "Domine boas ordenações e eficiência computacional com exemplos reais."),
-    ]
-    for col, (icon, title, desc) in zip(cols, futuras):
-        with col:
-            st.markdown(
-                f'<div class="trail-card trail-card--locked">'
-                f'  <div class="trail-header">'
-                f'    <div class="trail-icon">{icon}</div>'
-                f'    <div class="trail-info">'
-                f'      <div class="trail-title">{title}</div>'
-                f'      <div class="trail-sub">Em breve</div>'
-                f'    </div>'
-                f'    <div class="trail-lock">🔒</div>'
-                f'  </div>'
-                f'  <div class="trail-desc">{desc}</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
 
 
 # ══════════════════════════════════════════════════════════════
