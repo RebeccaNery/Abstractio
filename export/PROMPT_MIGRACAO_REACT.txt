@@ -1,0 +1,199 @@
+================================================================================
+ABSTRACTIO — PROMPT DE MIGRAÇÃO PARA REACT
+================================================================================
+
+Você está ajudando Rebecca a reescrever o Abstractio em React.
+O Abstractio é um app educacional gamificado para ensinar Programação Orientada
+a Objetos (POO) em Python. A versão anterior era feita em Streamlit (Python).
+Esta é uma migração completa: a versão Streamlit está arquivada e não precisa
+ser mantida. O objetivo é ter feature parity visual e funcional.
+
+--------------------------------------------------------------------------------
+REGRA PRINCIPAL DE COLABORAÇÃO
+--------------------------------------------------------------------------------
+
+NUNCA realize mudanças ou implementações sem confirmação prévia da Rebecca.
+Apresente a proposta, aguarde aprovação, só então execute.
+
+--------------------------------------------------------------------------------
+CONVENÇÕES DE GIT
+--------------------------------------------------------------------------------
+
+- Mensagens de commit sempre em Português do Brasil
+- Usar Conventional Commits em pt-BR: tipo: descrição curta
+  Exemplos: feat: adicionar tela de missão
+            fix: corrigir cálculo de pontuação
+            style: ajustar espaçamento do hero
+- Tipos aceitos: feat, fix, refactor, style, docs, chore
+- Quando houver múltiplas mudanças, incluir corpo com bullet points em pt-BR
+- Ao finalizar qualquer implementação, perguntar à Rebecca se deseja commitar
+
+--------------------------------------------------------------------------------
+STACK RECOMENDADA
+--------------------------------------------------------------------------------
+
+- Vite + React (sem Next.js — app puramente client-side, sem SSR necessário)
+- React Router v6 para navegação entre telas
+- CSS Modules para estilos com escopo por componente
+- localStorage para persistência do progresso do usuário
+- Sem Redux — useState + useContext são suficientes
+
+--------------------------------------------------------------------------------
+ASSETS DISPONÍVEIS (pasta export/ do repo antigo)
+--------------------------------------------------------------------------------
+
+1. curriculum.json
+   Todo o conteúdo do curso em JSON. Estrutura:
+   [
+     {
+       "id": 0,
+       "title": "Nível 1 — Fundamentos: O despertar do Polvinho",
+       "short": "Fundamentos",
+       "missoes": [
+         {
+           "id": "0-0",               <- "nivel-missao" base 0
+           "title": "...",
+           "icon": "🧩",
+           "theory": "...",           <- Markdown
+           "exercise": {
+             "question": "...",
+             "options": ["...", ...],
+             "correct": 1,           <- índice da opção correta
+             "explanation": "..."
+           },
+           "has_interativo": true,
+           "interativo_html": "interativos/nivel_1_missao_1.html"  <- opcional
+         }
+       ]
+     }
+   ]
+   4 níveis, 30 missões no total.
+
+2. interativos/nivel_1_missao_1.html
+   HTML/CSS/JS autossuficiente do mini-jogo da missão 1 (drag & drop).
+   Renderizar via <iframe srcDoc={html}> ou como componente inline.
+   Apenas 1 mini-jogo existe na versão atual.
+
+3. design-tokens.css
+   Todas as variáveis CSS (cores, gradientes, sombras, border-radius) da
+   versão Streamlit, prontas para uso no React. Importe como global CSS.
+
+--------------------------------------------------------------------------------
+TELAS (rotas)
+--------------------------------------------------------------------------------
+
+/ ou /dashboard
+  Tela inicial. Contém:
+  - Hero carousel com 2 slides (roxo e verde menta), setas de navegação e dots
+  - Slide 1 (roxo): boas-vindas, CTA "Continuar trilha" e "Ver conquistas"
+  - Slide 2 (verde menta): seção "Como funciona" com 3 passos
+  - Grid de feature cards (Minha Trilha, Conquistas, + futuros bloqueados)
+
+/trilhas
+  Lista de trilhas disponíveis. Hoje só existe "Trilha POO".
+  Exibe card com título, ícone, descrição, barra de progresso e % concluído.
+  Trilhas futuras aparecem bloqueadas (opacity 0.45, pointer-events none).
+
+/trilha
+  Mapa de missões da Trilha POO.
+  Exibe os 4 níveis com suas missões em lista.
+  Cada missão mostra: ícone de status (✅ concluída / 🔒 bloqueada / círculo vazio),
+  nome e pontos (+15 pts).
+  Missões são desbloqueadas sequencialmente.
+
+/missao/:nivelIdx/:missaoIdx
+  Conteúdo de uma missão. Estrutura da tela:
+  1. Teoria em Markdown (usar biblioteca como react-markdown)
+  2. Mini-jogo interativo (se has_interativo === true)
+  3. Exercício de múltipla escolha (radio buttons estilizados)
+  4. Feedback após resposta (correto = verde, errado = vermelho)
+  5. Botão "Próxima missão" após responder
+
+/conquistas
+  Estante de troféus. Um trophy card por missão (110px de largura).
+  Missões concluídas: earned (gradiente roxo escuro, borda roxa).
+  Missões pendentes: unearned (opacity 0.35, grayscale).
+
+--------------------------------------------------------------------------------
+ESTADO GLOBAL (substituindo o session_state do Streamlit)
+--------------------------------------------------------------------------------
+
+Persistir em localStorage. Estrutura sugerida:
+
+{
+  "completed": ["0-0", "0-1", ...],   // IDs das missões concluídas
+  "niveis_concluidos": [0, 1, ...],   // índices dos níveis 100% completos
+  "pontuacao": 45,                    // +15 por missão concluída
+  "nivel_nome_idx": 1                 // índice no array de ranks abaixo
+}
+
+Ranks (nivel_nome), desbloqueados ao completar cada nível:
+  0 → "Polvinho"         (inicial)
+  1 → "Explorador"
+  2 → "Mestre dos Mares"
+  3 → "Kraken"
+
+Emblemas desbloqueados por pontuação:
+  50 pts  → emblema 1
+  100 pts → emblema 2
+  150 pts → emblema 3
+  200 pts → emblema 4
+
+Pontuação: +15 pts por missão concluída.
+Completar um nível inteiro sobe o rank (nivel_nome_idx + 1).
+
+--------------------------------------------------------------------------------
+NOMENCLATURA (importante — manter consistente)
+--------------------------------------------------------------------------------
+
+- "Nível"  = o que outras plataformas chamam de módulo (4 no total)
+- "Missão" = o que outras plataformas chamam de aula/seção (30 no total)
+
+Usar esses termos em todo o código (variáveis, componentes, comentários).
+
+--------------------------------------------------------------------------------
+ESTÉTICA / DESIGN
+--------------------------------------------------------------------------------
+
+O design é dark mode, tema oceano profundo com accent roxo.
+Consulte design-tokens.css para todos os valores de cor e gradiente.
+
+Paleta principal:
+  Fundo base:     #0f0f23
+  Superfície:     #1a1a2e
+  Borda padrão:   #2d2d44
+  Roxo primário:  #7c3aed
+  Verde sucesso:  #10b981
+  Texto:          #e2e8f0
+  Texto suave:    #94a3b8
+  Accent texto:   #c4b5fd
+
+O hero tem duas variantes:
+  - Roxo: linear-gradient(135deg, #4c1d95, #6d28d9, #7c3aed)
+  - Verde menta: linear-gradient(135deg, #065f46, #059669, #10b981)
+
+Botão primário: gradiente roxo, letra branca, hover com sombra roxa.
+Botão secundário: fundo escuro, borda cinza, hover com borda roxa.
+
+Sem mascote visível na UI atual — a narrativa do polvo existe nos textos
+das missões e nos nomes dos ranks, não em imagens.
+
+--------------------------------------------------------------------------------
+COMPONENTES PRIORITÁRIOS PARA CONSTRUIR
+--------------------------------------------------------------------------------
+
+(em ordem sugerida)
+
+1. Layout base (sidebar ou nav) com nome do usuário e pontuação
+2. Roteamento entre as 5 telas
+3. HeroCarousel (2 slides, setas, dots)
+4. ProgressBar de missões (dots conectados por nível)
+5. MissaoCard (linha de missão com status, nome e pts)
+6. MissaoPage (teoria + exercício + feedback)
+7. InterativoFrame (iframe com HTML do mini-jogo)
+8. TrophyShelf (grade de trophy cards)
+9. TrailCard (card de trilha com progress bar)
+
+================================================================================
+FIM DO PROMPT
+================================================================================
